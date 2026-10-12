@@ -1,0 +1,57 @@
+[importlinter]
+root_package = bhoot
+include_external_packages = True
+
+[importlinter:contract:domain-is-pure]
+name = Domain imports no engine, ports, adapters or infrastructure libraries
+type = forbidden
+source_modules =
+    bhoot.domain
+forbidden_modules =
+    bhoot.engine
+    bhoot.ports
+    bhoot.adapters
+    bhoot.api
+    bhoot.cli
+    langgraph
+    litellm
+    pypdfium2
+    pdfplumber
+    rapidocr
+    cv2
+
+[importlinter:contract:ports-depend-on-domain-only]
+name = Ports depend only on the domain
+type = forbidden
+source_modules =
+    bhoot.ports
+forbidden_modules =
+    bhoot.engine
+    bhoot.adapters
+    bhoot.api
+    bhoot.cli
+
+[importlinter:contract:engine-never-imports-adapters]
+name = Engine depends on ports, never on concrete adapters
+type = forbidden
+source_modules =
+    bhoot.engine
+forbidden_modules =
+    bhoot.adapters
+    bhoot.api
+    bhoot.cli
+    litellm
+    pypdfium2
+    pdfplumber
+    rapidocr
+    cv2
+
+[importlinter:contract:adapters-not-engine-internals]
+name = Adapters do not import the engine
+type = forbidden
+source_modules =
+    bhoot.adapters
+forbidden_modules =
+    bhoot.engine
+    bhoot.api
+    bhoot.cli
