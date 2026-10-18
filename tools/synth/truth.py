@@ -63,12 +63,8 @@ def write_case(
 ) -> None:
     case_dir.mkdir(parents=True, exist_ok=True)
     (case_dir / f"document{suffix}").write_bytes(document)
-    (case_dir / "expected.json").write_text(
-        json.dumps(expected, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-    (case_dir / "meta.json").write_text(
-        json.dumps(meta, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    _write_lf(case_dir / "expected.json", json.dumps(expected, indent=2, ensure_ascii=False) + "\n")
+    _write_lf(case_dir / "meta.json", json.dumps(meta, indent=2, sort_keys=True) + "\n")
 
 
 def write_manifest(dataset_dir: Path, *, schema: str, cases: list[dict[str, Any]]) -> None:
@@ -79,6 +75,9 @@ def write_manifest(dataset_dir: Path, *, schema: str, cases: list[dict[str, Any]
         "synthetic": True,
         "cases": cases,
     }
-    (dataset_dir / "manifest.yaml").write_text(
-        yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8"
-    )
+    _write_lf(dataset_dir / "manifest.yaml", yaml.safe_dump(manifest, sort_keys=False))
+
+
+def _write_lf(path: Path, text: str) -> None:
+    # LF on every OS, so regenerating a dataset gives byte-identical files everywhere
+    path.write_bytes(text.encode("utf-8"))
