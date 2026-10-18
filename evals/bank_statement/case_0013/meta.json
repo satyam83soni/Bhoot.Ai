@@ -1,0 +1,16 @@
+{
+  "kinds": {
+    "charges": 1,
+    "interest": 1,
+    "neft_dr": 1,
+    "pos": 2,
+    "salary": 2,
+    "upi_cr": 4,
+    "upi_dr": 64,
+    "utility": 2
+  },
+  "layout": "bank_c",
+  "profile": "digital",
+  "rows": 77,
+  "seed": 70012
+}

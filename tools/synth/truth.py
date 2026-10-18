@@ -1,0 +1,83 @@
+"""Ground truth for synthetic documents.
+
+``expected.json`` is produced from the same ledger that was printed, so it is always correct.
+It contains plain values only (no evidence envelopes), in the shape of the
+``lending.bank_statement`` pack schema (LLD §9.24.1): amounts as decimal strings, dates ISO.
+"""
+
+from __future__ import annotations
+
+import json
+from decimal import Decimal
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+from tools.synth.ledger import Ledger
+
+DATASET_VERSION = 1
+
+
+def _amount(value: Decimal | None) -> str | None:
+    return None if value is None else f"{value:.2f}"
+
+
+def bank_statement_expected(ledger: Ledger) -> dict[str, Any]:
+    a = ledger.account
+    return {
+        "bank_name": a.bank.name,
+        "account_holder": a.account_holder,
+        "account_number": a.account_number,
+        "ifsc": a.ifsc,
+        "account_type": a.account_type,
+        "currency": a.currency,
+        "period": {
+            "from_date": ledger.period_from.isoformat(),
+            "to_date": ledger.period_to.isoformat(),
+        },
+        "opening_balance": _amount(ledger.opening_balance),
+        "closing_balance": _amount(ledger.closing_balance),
+        "transactions": [
+            {
+                "date": t.date.isoformat(),
+                "value_date": t.value_date.isoformat(),
+                "description": t.description,
+                "reference": t.reference,
+                "debit": _amount(t.debit),
+                "credit": _amount(t.credit),
+                "balance": _amount(t.balance),
+            }
+            for t in ledger.transactions
+        ],
+    }
+
+
+def write_case(
+    case_dir: Path,
+    *,
+    document: bytes,
+    expected: dict[str, Any],
+    meta: dict[str, Any],
+    suffix: str = ".pdf",
+) -> None:
+    case_dir.mkdir(parents=True, exist_ok=True)
+    (case_dir / f"document{suffix}").write_bytes(document)
+    _write_lf(case_dir / "expected.json", json.dumps(expected, indent=2, ensure_ascii=False) + "\n")
+    _write_lf(case_dir / "meta.json", json.dumps(meta, indent=2, sort_keys=True) + "\n")
+
+
+def write_manifest(dataset_dir: Path, *, schema: str, cases: list[dict[str, Any]]) -> None:
+    manifest = {
+        "dataset_version": DATASET_VERSION,
+        "schema": schema,
+        "locale": {"country": "IN", "currency": "INR", "dayfirst": True},
+        "synthetic": True,
+        "cases": cases,
+    }
+    _write_lf(dataset_dir / "manifest.yaml", yaml.safe_dump(manifest, sort_keys=False))
+
+
+def _write_lf(path: Path, text: str) -> None:
+    # LF on every OS, so regenerating a dataset gives byte-identical files everywhere
+    path.write_bytes(text.encode("utf-8"))

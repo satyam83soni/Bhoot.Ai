@@ -1,0 +1,1312 @@
+{
+  "bank_name": "Aster Bank Ltd",
+  "account_holder": "Gunbir Sarma",
+  "account_number": "204279356261045",
+  "ifsc": "ASTR0G2C5Q1",
+  "account_type": "current",
+  "currency": "INR",
+  "period": {
+    "from_date": "2024-04-01",
+    "to_date": "2024-07-31"
+  },
+  "opening_balance": "147671.98",
+  "closing_balance": "56456.93",
+  "transactions": [
+    {
+      "date": "2024-04-03",
+      "value_date": "2024-04-03",
+      "description": "UPI/DR/092706569506/STYLEHUB/stylehub84@bank/PAYMENT",
+      "reference": "092706569506",
+      "debit": "206.27",
+      "credit": null,
+      "balance": "147465.71"
+    },
+    {
+      "date": "2024-04-03",
+      "value_date": "2024-04-03",
+      "description": "UPI/DR/867728376306/CITYCABS/citycabs59@upi/PAYMENT",
+      "reference": "867728376306",
+      "debit": "854.91",
+      "credit": null,
+      "balance": "146610.80"
+    },
+    {
+      "date": "2024-04-05",
+      "value_date": "2024-04-05",
+      "description": "UPI/DR/357030833329/TRAVELNEST/travelnest35@bank/PAYMENT",
+      "reference": "357030833329",
+      "debit": "199.00",
+      "credit": null,
+      "balance": "146411.80"
+    },
+    {
+      "date": "2024-04-05",
+      "value_date": "2024-04-05",
+      "description": "UPI/DR/206827519025/STREAMBOX/streambox94@pay/PAYMENT",
+      "reference": "206827519025",
+      "debit": "30.35",
+      "credit": null,
+      "balance": "146381.45"
+    },
+    {
+      "date": "2024-04-05",
+      "value_date": "2024-04-05",
+      "description": "ACH D- NORTHSTAR HOME LOANS-20912371",
+      "reference": "ACH229603351",
+      "debit": "31145.29",
+      "credit": null,
+      "balance": "115236.16"
+    },
+    {
+      "date": "2024-04-06",
+      "value_date": "2024-04-06",
+      "description": "UPI/DR/470683607272/FOODKART/foodkart5@pay/PAYMENT",
+      "reference": "470683607272",
+      "debit": "493.22",
+      "credit": null,
+      "balance": "114742.94"
+    },
+    {
+      "date": "2024-04-06",
+      "value_date": "2024-04-06",
+      "description": "UPI/DR/740637545507/FUELSTOP/fuelstop87@bank/PAYMENT",
+      "reference": "740637545507",
+      "debit": "292.18",
+      "credit": null,
+      "balance": "114450.76"
+    },
+    {
+      "date": "2024-04-07",
+      "value_date": "2024-04-07",
+      "description": "ACH D- NORTHSTAR HOME LOANS-18486740",
+      "reference": "ACH564324333",
+      "debit": "12800.92",
+      "credit": null,
+      "balance": "101649.84"
+    },
+    {
+      "date": "2024-04-08",
+      "value_date": "2024-04-08",
+      "description": "UPI/DR/074856860949/STREAMBOX/streambox74@bank/PAYMENT",
+      "reference": "074856860949",
+      "debit": "253.23",
+      "credit": null,
+      "balance": "101396.61"
+    },
+    {
+      "date": "2024-04-08",
+      "value_date": "2024-04-08",
+      "description": "UPI/DR/100404896993/HOMEFIX SERVICES/homefixser86@pay/PAYMENT",
+      "reference": "100404896993",
+      "debit": "548.22",
+      "credit": null,
+      "balance": "100848.39"
+    },
+    {
+      "date": "2024-04-09",
+      "value_date": "2024-04-09",
+      "description": "UPI/DR/251714212823/TRAVELNEST/travelnest10@pay/PAYMENT",
+      "reference": "251714212823",
+      "debit": "480.08",
+      "credit": null,
+      "balance": "100368.31"
+    },
+    {
+      "date": "2024-04-12",
+      "value_date": "2024-04-12",
+      "description": "UPI/DR/331041831343/DAILYFRESH DAIRY/dailyfresh16@pay/PAYMENT",
+      "reference": "331041831343",
+      "debit": "337.00",
+      "credit": null,
+      "balance": "100031.31"
+    },
+    {
+      "date": "2024-04-12",
+      "value_date": "2024-04-12",
+      "description": "BILLPAY/SKYNET BROADBAND/6497793880",
+      "reference": null,
+      "debit": "2365.42",
+      "credit": null,
+      "balance": "97665.89"
+    },
+    {
+      "date": "2024-04-13",
+      "value_date": "2024-04-13",
+      "description": "UPI/DR/752219701364/MEDIPLUS PHARMACY/mediplusph4@upi/PAYMENT",
+      "reference": "752219701364",
+      "debit": "294.00",
+      "credit": null,
+      "balance": "97371.89"
+    },
+    {
+      "date": "2024-04-14",
+      "value_date": "2024-04-14",
+      "description": "UPI/DR/722811328963/BOOKNEST/booknest64@bank/PAYMENT",
+      "reference": "722811328963",
+      "debit": "426.57",
+      "credit": null,
+      "balance": "96945.32"
+    },
+    {
+      "date": "2024-04-14",
+      "value_date": "2024-04-14",
+      "description": "UPI/DR/086629693870/PAYWELL RECHARGE/paywellrec90@upi/PAYMENT",
+      "reference": "086629693870",
+      "debit": "733.46",
+      "credit": null,
+      "balance": "96211.86"
+    },
+    {
+      "date": "2024-04-15",
+      "value_date": "2024-04-15",
+      "description": "UPI/DR/522952078034/DAILYFRESH DAIRY/dailyfresh8@bank/PAYMENT",
+      "reference": "522952078034",
+      "debit": "601.60",
+      "credit": null,
+      "balance": "95610.26"
+    },
+    {
+      "date": "2024-04-16",
+      "value_date": "2024-04-16",
+      "description": "UPI/DR/204690967664/STREAMBOX/streambox60@bank/PAYMENT",
+      "reference": "204690967664",
+      "debit": "359.15",
+      "credit": null,
+      "balance": "95251.11"
+    },
+    {
+      "date": "2024-04-18",
+      "value_date": "2024-04-18",
+      "description": "UPI/DR/571238480101/STYLEHUB/stylehub38@bank/PAYMENT",
+      "reference": "571238480101",
+      "debit": "1529.51",
+      "credit": null,
+      "balance": "93721.60"
+    },
+    {
+      "date": "2024-04-20",
+      "value_date": "2024-04-20",
+      "description": "UPI/CR/750201834562/NISHA GUPTA/nishagupta24@upi/UPI",
+      "reference": "750201834562",
+      "debit": null,
+      "credit": "2500.00",
+      "balance": "96221.60"
+    },
+    {
+      "date": "2024-04-20",
+      "value_date": "2024-04-20",
+      "description": "UPI/DR/516719165607/STREAMBOX/streambox60@upi/PAYMENT",
+      "reference": "516719165607",
+      "debit": "182.00",
+      "credit": null,
+      "balance": "96039.60"
+    },
+    {
+      "date": "2024-04-21",
+      "value_date": "2024-04-21",
+      "description": "UPI/CR/336867977111/BALVAN CHEEMA/balvanchee47@upi/UPI",
+      "reference": "336867977111",
+      "debit": null,
+      "credit": "2500.00",
+      "balance": "98539.60"
+    },
+    {
+      "date": "2024-04-21",
+      "value_date": "2024-04-22",
+      "description": "CHQ DEP-043539-CLG-PUNE",
+      "reference": "043539",
+      "debit": null,
+      "credit": "25718.77",
+      "balance": "124258.37"
+    },
+    {
+      "date": "2024-04-21",
+      "value_date": "2024-04-21",
+      "description": "UPI/DR/532235478899/DAILYFRESH DAIRY/dailyfresh89@upi/PAYMENT",
+      "reference": "532235478899",
+      "debit": "67.41",
+      "credit": null,
+      "balance": "124190.96"
+    },
+    {
+      "date": "2024-04-22",
+      "value_date": "2024-04-22",
+      "description": "ATM WDL-S13224ZZ-JAIPUR",
+      "reference": null,
+      "debit": "3000.00",
+      "credit": null,
+      "balance": "121190.96"
+    },
+    {
+      "date": "2024-04-23",
+      "value_date": "2024-04-23",
+      "description": "UPI/DR/047495522904/TRAVELNEST/travelnest26@pay/PAYMENT",
+      "reference": "047495522904",
+      "debit": "680.02",
+      "credit": null,
+      "balance": "120510.94"
+    },
+    {
+      "date": "2024-04-24",
+      "value_date": "2024-04-24",
+      "description": "UPI/DR/433347777645/DAILYFRESH DAIRY/dailyfresh76@pay/PAYMENT",
+      "reference": "433347777645",
+      "debit": "1411.87",
+      "credit": null,
+      "balance": "119099.07"
+    },
+    {
+      "date": "2024-04-24",
+      "value_date": "2024-04-24",
+      "description": "UPI/DR/017557970870/STREAMBOX/streambox27@pay/PAYMENT",
+      "reference": "017557970870",
+      "debit": "392.47",
+      "credit": null,
+      "balance": "118706.60"
+    },
+    {
+      "date": "2024-04-24",
+      "value_date": "2024-04-24",
+      "description": "UPI/DR/242879057773/PAYWELL RECHARGE/paywellrec29@bank/PAYMENT",
+      "reference": "242879057773",
+      "debit": "104.69",
+      "credit": null,
+      "balance": "118601.91"
+    },
+    {
+      "date": "2024-04-26",
+      "value_date": "2024-04-26",
+      "description": "UPI/DR/500732871838/DAILYFRESH DAIRY/dailyfresh2@upi/PAYMENT",
+      "reference": "500732871838",
+      "debit": "375.00",
+      "credit": null,
+      "balance": "118226.91"
+    },
+    {
+      "date": "2024-04-28",
+      "value_date": "2024-04-28",
+      "description": "ATM WDL-S1T7WQIT-JAIPUR",
+      "reference": null,
+      "debit": "500.00",
+      "credit": null,
+      "balance": "117726.91"
+    },
+    {
+      "date": "2024-04-30",
+      "value_date": "2024-04-30",
+      "description": "NEFT CR-ASTB37248658746-MAJUMDAR TEXTILES PVT LTD-SALARY APR24",
+      "reference": "ASTB37248658746",
+      "debit": null,
+      "credit": "25620.00",
+      "balance": "143346.91"
+    },
+    {
+      "date": "2024-05-01",
+      "value_date": "2024-05-01",
+      "description": "UPI/DR/507749396677/MEDIPLUS PHARMACY/mediplusph24@pay/PAYMENT",
+      "reference": "507749396677",
+      "debit": "216.76",
+      "credit": null,
+      "balance": "143130.15"
+    },
+    {
+      "date": "2024-05-01",
+      "value_date": "2024-05-01",
+      "description": "UPI/DR/139445292599/TRAVELNEST/travelnest77@bank/PAYMENT",
+      "reference": "139445292599",
+      "debit": "322.99",
+      "credit": null,
+      "balance": "142807.16"
+    },
+    {
+      "date": "2024-05-01",
+      "value_date": "2024-05-01",
+      "description": "ATM WDL-S1NVXTH0-PUNE",
+      "reference": null,
+      "debit": "500.00",
+      "credit": null,
+      "balance": "142307.16"
+    },
+    {
+      "date": "2024-05-02",
+      "value_date": "2024-05-02",
+      "description": "UPI/DR/378712588104/BOOKNEST/booknest60@bank/PAYMENT",
+      "reference": "378712588104",
+      "debit": "93.34",
+      "credit": null,
+      "balance": "142213.82"
+    },
+    {
+      "date": "2024-05-03",
+      "value_date": "2024-05-03",
+      "description": "UPI/DR/028365341880/FUELSTOP/fuelstop49@bank/PAYMENT",
+      "reference": "028365341880",
+      "debit": "417.76",
+      "credit": null,
+      "balance": "141796.06"
+    },
+    {
+      "date": "2024-05-03",
+      "value_date": "2024-05-03",
+      "description": "UPI/DR/063220296750/FOODKART/foodkart76@pay/PAYMENT",
+      "reference": "063220296750",
+      "debit": "659.00",
+      "credit": null,
+      "balance": "141137.06"
+    },
+    {
+      "date": "2024-05-05",
+      "value_date": "2024-05-05",
+      "description": "ACH D- NORTHSTAR HOME LOANS-20912371",
+      "reference": "ACH459876659",
+      "debit": "31145.29",
+      "credit": null,
+      "balance": "109991.77"
+    },
+    {
+      "date": "2024-05-07",
+      "value_date": "2024-05-07",
+      "description": "UPI/DR/878264347846/MEDIPLUS PHARMACY/mediplusph72@pay/PAYMENT",
+      "reference": "878264347846",
+      "debit": "242.00",
+      "credit": null,
+      "balance": "109749.77"
+    },
+    {
+      "date": "2024-05-07",
+      "value_date": "2024-05-07",
+      "description": "ACH D- NORTHSTAR HOME LOANS-18486740",
+      "reference": "ACH075196788",
+      "debit": "12800.92",
+      "credit": null,
+      "balance": "96948.85"
+    },
+    {
+      "date": "2024-05-10",
+      "value_date": "2024-05-10",
+      "description": "UPI/DR/573987325278/STREAMBOX/streambox8@bank/PAYMENT",
+      "reference": "573987325278",
+      "debit": "54.00",
+      "credit": null,
+      "balance": "96894.85"
+    },
+    {
+      "date": "2024-05-10",
+      "value_date": "2024-05-10",
+      "description": "UPI/DR/166876962433/CITYCABS/citycabs1@bank/PAYMENT",
+      "reference": "166876962433",
+      "debit": "256.00",
+      "credit": null,
+      "balance": "96638.85"
+    },
+    {
+      "date": "2024-05-10",
+      "value_date": "2024-05-10",
+      "description": "UPI/DR/281502965646/BOOKNEST/booknest54@upi/PAYMENT",
+      "reference": "281502965646",
+      "debit": "598.00",
+      "credit": null,
+      "balance": "96040.85"
+    },
+    {
+      "date": "2024-05-12",
+      "value_date": "2024-05-12",
+      "description": "UPI/DR/591966524392/QUICKMART GROCERY/quickmartg99@bank/PAYMENT",
+      "reference": "591966524392",
+      "debit": "289.52",
+      "credit": null,
+      "balance": "95751.33"
+    },
+    {
+      "date": "2024-05-12",
+      "value_date": "2024-05-12",
+      "description": "UPI/DR/344146889099/FOODKART/foodkart90@pay/PAYMENT",
+      "reference": "344146889099",
+      "debit": "77.82",
+      "credit": null,
+      "balance": "95673.51"
+    },
+    {
+      "date": "2024-05-12",
+      "value_date": "2024-05-12",
+      "description": "UPI/DR/547423148800/QUICKMART GROCERY/quickmartg93@upi/PAYMENT",
+      "reference": "547423148800",
+      "debit": "676.00",
+      "credit": null,
+      "balance": "94997.51"
+    },
+    {
+      "date": "2024-05-12",
+      "value_date": "2024-05-12",
+      "description": "ATM WDL-S11G1FVZ-LUCKNOW",
+      "reference": null,
+      "debit": "1000.00",
+      "credit": null,
+      "balance": "93997.51"
+    },
+    {
+      "date": "2024-05-14",
+      "value_date": "2024-05-14",
+      "description": "UPI/DR/825719549218/PAYWELL RECHARGE/paywellrec48@pay/PAYMENT",
+      "reference": "825719549218",
+      "debit": "138.00",
+      "credit": null,
+      "balance": "93859.51"
+    },
+    {
+      "date": "2024-05-15",
+      "value_date": "2024-05-15",
+      "description": "UPI/DR/097384331260/TRAVELNEST/travelnest16@upi/PAYMENT",
+      "reference": "097384331260",
+      "debit": "468.10",
+      "credit": null,
+      "balance": "93391.41"
+    },
+    {
+      "date": "2024-05-15",
+      "value_date": "2024-05-15",
+      "description": "UPI/DR/938151306427/PAYWELL RECHARGE/paywellrec96@upi/PAYMENT",
+      "reference": "938151306427",
+      "debit": "660.30",
+      "credit": null,
+      "balance": "92731.11"
+    },
+    {
+      "date": "2024-05-16",
+      "value_date": "2024-05-16",
+      "description": "BILLPAY/SKYNET BROADBAND/4783887024",
+      "reference": null,
+      "debit": "4238.24",
+      "credit": null,
+      "balance": "88492.87"
+    },
+    {
+      "date": "2024-05-18",
+      "value_date": "2024-05-18",
+      "description": "UPI/DR/258815616806/CITYCABS/citycabs39@upi/PAYMENT",
+      "reference": "258815616806",
+      "debit": "401.39",
+      "credit": null,
+      "balance": "88091.48"
+    },
+    {
+      "date": "2024-05-18",
+      "value_date": "2024-05-18",
+      "description": "NEFT DR-ASTB48457025047-RISHI SARMA-TRANSFER",
+      "reference": "ASTB48457025047",
+      "debit": "11930.94",
+      "credit": null,
+      "balance": "76160.54"
+    },
+    {
+      "date": "2024-05-19",
+      "value_date": "2024-05-19",
+      "description": "UPI/DR/400950149709/PAYWELL RECHARGE/paywellrec41@pay/PAYMENT",
+      "reference": "400950149709",
+      "debit": "247.00",
+      "credit": null,
+      "balance": "75913.54"
+    },
+    {
+      "date": "2024-05-21",
+      "value_date": "2024-05-21",
+      "description": "UPI/DR/663353728982/FUELSTOP/fuelstop39@bank/PAYMENT",
+      "reference": "663353728982",
+      "debit": "52.00",
+      "credit": null,
+      "balance": "75861.54"
+    },
+    {
+      "date": "2024-05-21",
+      "value_date": "2024-05-21",
+      "description": "UPI/DR/642617601162/QUICKMART GROCERY/quickmartg35@bank/PAYMENT",
+      "reference": "642617601162",
+      "debit": "121.16",
+      "credit": null,
+      "balance": "75740.38"
+    },
+    {
+      "date": "2024-05-21",
+      "value_date": "2024-05-21",
+      "description": "UPI/DR/966241791430/STREAMBOX/streambox10@pay/PAYMENT",
+      "reference": "966241791430",
+      "debit": "259.00",
+      "credit": null,
+      "balance": "75481.38"
+    },
+    {
+      "date": "2024-05-21",
+      "value_date": "2024-05-21",
+      "description": "POS XXXXXXXXXXXX7207 FOODKART",
+      "reference": null,
+      "debit": "2450.62",
+      "credit": null,
+      "balance": "73030.76"
+    },
+    {
+      "date": "2024-05-26",
+      "value_date": "2024-05-26",
+      "description": "UPI/DR/907680864081/STREAMBOX/streambox84@upi/PAYMENT",
+      "reference": "907680864081",
+      "debit": "179.52",
+      "credit": null,
+      "balance": "72851.24"
+    },
+    {
+      "date": "2024-05-27",
+      "value_date": "2024-05-27",
+      "description": "UPI/DR/136000671033/BOOKNEST/booknest16@bank/PAYMENT",
+      "reference": "136000671033",
+      "debit": "206.87",
+      "credit": null,
+      "balance": "72644.37"
+    },
+    {
+      "date": "2024-05-28",
+      "value_date": "2024-05-28",
+      "description": "UPI/DR/155492886195/FUELSTOP/fuelstop9@pay/PAYMENT",
+      "reference": "155492886195",
+      "debit": "290.00",
+      "credit": null,
+      "balance": "72354.37"
+    },
+    {
+      "date": "2024-05-29",
+      "value_date": "2024-05-29",
+      "description": "POS XXXXXXXXXXXX8909 QUICKMART GROCERY",
+      "reference": null,
+      "debit": "2308.77",
+      "credit": null,
+      "balance": "70045.60"
+    },
+    {
+      "date": "2024-05-30",
+      "value_date": "2024-05-30",
+      "description": "UPI/DR/786567160026/STYLEHUB/stylehub73@bank/PAYMENT",
+      "reference": "786567160026",
+      "debit": "205.91",
+      "credit": null,
+      "balance": "69839.69"
+    },
+    {
+      "date": "2024-05-30",
+      "value_date": "2024-05-30",
+      "description": "ATM WDL-S1P7TLVT-KOLKATA",
+      "reference": null,
+      "debit": "2000.00",
+      "credit": null,
+      "balance": "67839.69"
+    },
+    {
+      "date": "2024-05-31",
+      "value_date": "2024-05-31",
+      "description": "NEFT CR-ASTB28534546817-MAJUMDAR TEXTILES PVT LTD-SALARY MAY24",
+      "reference": "ASTB28534546817",
+      "debit": null,
+      "credit": "25620.00",
+      "balance": "93459.69"
+    },
+    {
+      "date": "2024-06-02",
+      "value_date": "2024-06-02",
+      "description": "UPI/DR/503375462173/HOMEFIX SERVICES/homefixser32@bank/PAYMENT",
+      "reference": "503375462173",
+      "debit": "409.00",
+      "credit": null,
+      "balance": "93050.69"
+    },
+    {
+      "date": "2024-06-04",
+      "value_date": "2024-06-04",
+      "description": "UPI/DR/555471797268/STYLEHUB/stylehub70@pay/PAYMENT",
+      "reference": "555471797268",
+      "debit": "105.00",
+      "credit": null,
+      "balance": "92945.69"
+    },
+    {
+      "date": "2024-06-04",
+      "value_date": "2024-06-04",
+      "description": "UPI/DR/138239032553/QUICKMART GROCERY/quickmartg92@upi/PAYMENT",
+      "reference": "138239032553",
+      "debit": "343.00",
+      "credit": null,
+      "balance": "92602.69"
+    },
+    {
+      "date": "2024-06-04",
+      "value_date": "2024-06-04",
+      "description": "UPI/DR/629617654463/STREAMBOX/streambox84@upi/PAYMENT",
+      "reference": "629617654463",
+      "debit": "110.00",
+      "credit": null,
+      "balance": "92492.69"
+    },
+    {
+      "date": "2024-06-04",
+      "value_date": "2024-06-04",
+      "description": "UPI/DR/472745341486/PAYWELL RECHARGE/paywellrec91@bank/PAYMENT",
+      "reference": "472745341486",
+      "debit": "271.00",
+      "credit": null,
+      "balance": "92221.69"
+    },
+    {
+      "date": "2024-06-05",
+      "value_date": "2024-06-05",
+      "description": "ACH D- NORTHSTAR HOME LOANS-20912371",
+      "reference": "ACH419583788",
+      "debit": "31145.29",
+      "credit": null,
+      "balance": "61076.40"
+    },
+    {
+      "date": "2024-06-06",
+      "value_date": "2024-06-06",
+      "description": "UPI/DR/406343764070/BOOKNEST/booknest12@pay/PAYMENT",
+      "reference": "406343764070",
+      "debit": "339.00",
+      "credit": null,
+      "balance": "60737.40"
+    },
+    {
+      "date": "2024-06-07",
+      "value_date": "2024-06-07",
+      "description": "UPI/DR/557909906781/DAILYFRESH DAIRY/dailyfresh99@pay/PAYMENT",
+      "reference": "557909906781",
+      "debit": "313.00",
+      "credit": null,
+      "balance": "60424.40"
+    },
+    {
+      "date": "2024-06-07",
+      "value_date": "2024-06-07",
+      "description": "UPI/DR/461023479415/BOOKNEST/booknest85@upi/PAYMENT",
+      "reference": "461023479415",
+      "debit": "392.68",
+      "credit": null,
+      "balance": "60031.72"
+    },
+    {
+      "date": "2024-06-07",
+      "value_date": "2024-06-07",
+      "description": "UPI/DR/298464376399/CITYCABS/citycabs99@upi/PAYMENT",
+      "reference": "298464376399",
+      "debit": "771.00",
+      "credit": null,
+      "balance": "59260.72"
+    },
+    {
+      "date": "2024-06-07",
+      "value_date": "2024-06-07",
+      "description": "ACH D- NORTHSTAR HOME LOANS-18486740",
+      "reference": "ACH029636329",
+      "debit": "12800.92",
+      "credit": null,
+      "balance": "46459.80"
+    },
+    {
+      "date": "2024-06-09",
+      "value_date": "2024-06-09",
+      "description": "UPI/CR/306562765243/NACHIKET DAR/nachiketda71@pay/UPI",
+      "reference": "306562765243",
+      "debit": null,
+      "credit": "5000.00",
+      "balance": "51459.80"
+    },
+    {
+      "date": "2024-06-09",
+      "value_date": "2024-06-09",
+      "description": "UPI/DR/868382154144/QUICKMART GROCERY/quickmartg95@bank/PAYMENT",
+      "reference": "868382154144",
+      "debit": "100.00",
+      "credit": null,
+      "balance": "51359.80"
+    },
+    {
+      "date": "2024-06-10",
+      "value_date": "2024-06-10",
+      "description": "UPI/DR/752890146572/CITYCABS/citycabs38@pay/PAYMENT",
+      "reference": "752890146572",
+      "debit": "246.27",
+      "credit": null,
+      "balance": "51113.53"
+    },
+    {
+      "date": "2024-06-11",
+      "value_date": "2024-06-11",
+      "description": "UPI/DR/887470398001/MEDIPLUS PHARMACY/mediplusph26@pay/PAYMENT",
+      "reference": "887470398001",
+      "debit": "89.51",
+      "credit": null,
+      "balance": "51024.02"
+    },
+    {
+      "date": "2024-06-11",
+      "value_date": "2024-06-11",
+      "description": "BILLPAY/SKYNET BROADBAND/1609333715",
+      "reference": null,
+      "debit": "653.28",
+      "credit": null,
+      "balance": "50370.74"
+    },
+    {
+      "date": "2024-06-12",
+      "value_date": "2024-06-12",
+      "description": "UPI/DR/684808389166/TRAVELNEST/travelnest46@upi/PAYMENT",
+      "reference": "684808389166",
+      "debit": "231.08",
+      "credit": null,
+      "balance": "50139.66"
+    },
+    {
+      "date": "2024-06-14",
+      "value_date": "2024-06-14",
+      "description": "UPI/DR/235879786982/FOODKART/foodkart23@bank/PAYMENT",
+      "reference": "235879786982",
+      "debit": "275.90",
+      "credit": null,
+      "balance": "49863.76"
+    },
+    {
+      "date": "2024-06-17",
+      "value_date": "2024-06-17",
+      "description": "UPI/DR/056354982952/QUICKMART GROCERY/quickmartg92@pay/PAYMENT",
+      "reference": "056354982952",
+      "debit": "1344.00",
+      "credit": null,
+      "balance": "48519.76"
+    },
+    {
+      "date": "2024-06-18",
+      "value_date": "2024-06-18",
+      "description": "UPI/DR/651471087066/STYLEHUB/stylehub46@upi/PAYMENT",
+      "reference": "651471087066",
+      "debit": "380.00",
+      "credit": null,
+      "balance": "48139.76"
+    },
+    {
+      "date": "2024-06-18",
+      "value_date": "2024-06-18",
+      "description": "UPI/DR/633811933473/QUICKMART GROCERY/quickmartg52@upi/PAYMENT",
+      "reference": "633811933473",
+      "debit": "172.00",
+      "credit": null,
+      "balance": "47967.76"
+    },
+    {
+      "date": "2024-06-18",
+      "value_date": "2024-06-18",
+      "description": "POS XXXXXXXXXXXX7902 DAILYFRESH DAIRY",
+      "reference": null,
+      "debit": "644.10",
+      "credit": null,
+      "balance": "47323.66"
+    },
+    {
+      "date": "2024-06-19",
+      "value_date": "2024-06-19",
+      "description": "UPI/DR/184461894675/QUICKMART GROCERY/quickmartg62@bank/PAYMENT",
+      "reference": "184461894675",
+      "debit": "186.44",
+      "credit": null,
+      "balance": "47137.22"
+    },
+    {
+      "date": "2024-06-19",
+      "value_date": "2024-06-19",
+      "description": "NEFT DR-ASTB28246747881-NIKITA SOMAN-TRANSFER",
+      "reference": "ASTB28246747881",
+      "debit": "22221.45",
+      "credit": null,
+      "balance": "24915.77"
+    },
+    {
+      "date": "2024-06-20",
+      "value_date": "2024-06-20",
+      "description": "UPI/DR/655383000179/HOMEFIX SERVICES/homefixser48@pay/PAYMENT",
+      "reference": "655383000179",
+      "debit": "143.00",
+      "credit": null,
+      "balance": "24772.77"
+    },
+    {
+      "date": "2024-06-20",
+      "value_date": "2024-06-20",
+      "description": "UPI/DR/971625794826/FOODKART/foodkart34@pay/PAYMENT",
+      "reference": "971625794826",
+      "debit": "896.72",
+      "credit": null,
+      "balance": "23876.05"
+    },
+    {
+      "date": "2024-06-20",
+      "value_date": "2024-06-20",
+      "description": "UPI/DR/686244843510/DAILYFRESH DAIRY/dailyfresh42@pay/PAYMENT",
+      "reference": "686244843510",
+      "debit": "119.00",
+      "credit": null,
+      "balance": "23757.05"
+    },
+    {
+      "date": "2024-06-21",
+      "value_date": "2024-06-21",
+      "description": "UPI/DR/230075703199/HOMEFIX SERVICES/homefixser66@bank/PAYMENT",
+      "reference": "230075703199",
+      "debit": "629.00",
+      "credit": null,
+      "balance": "23128.05"
+    },
+    {
+      "date": "2024-06-23",
+      "value_date": "2024-06-23",
+      "description": "UPI/DR/711454061117/BOOKNEST/booknest52@bank/PAYMENT",
+      "reference": "711454061117",
+      "debit": "166.00",
+      "credit": null,
+      "balance": "22962.05"
+    },
+    {
+      "date": "2024-06-23",
+      "value_date": "2024-06-23",
+      "description": "UPI/DR/450308557176/STYLEHUB/stylehub56@pay/PAYMENT",
+      "reference": "450308557176",
+      "debit": "189.18",
+      "credit": null,
+      "balance": "22772.87"
+    },
+    {
+      "date": "2024-06-24",
+      "value_date": "2024-06-24",
+      "description": "UPI/DR/484662184315/FOODKART/foodkart12@bank/PAYMENT",
+      "reference": "484662184315",
+      "debit": "188.00",
+      "credit": null,
+      "balance": "22584.87"
+    },
+    {
+      "date": "2024-06-24",
+      "value_date": "2024-06-24",
+      "description": "UPI/DR/011970554093/TRAVELNEST/travelnest20@pay/PAYMENT",
+      "reference": "011970554093",
+      "debit": "41.00",
+      "credit": null,
+      "balance": "22543.87"
+    },
+    {
+      "date": "2024-06-24",
+      "value_date": "2024-06-24",
+      "description": "UPI/DR/554787708772/MEDIPLUS PHARMACY/mediplusph19@pay/PAYMENT",
+      "reference": "554787708772",
+      "debit": "238.00",
+      "credit": null,
+      "balance": "22305.87"
+    },
+    {
+      "date": "2024-06-24",
+      "value_date": "2024-06-24",
+      "description": "NEFT DR-ASTB43267486970-CHAITANYA KADE-TRANSFER",
+      "reference": "ASTB43267486970",
+      "debit": "15860.32",
+      "credit": null,
+      "balance": "6445.55"
+    },
+    {
+      "date": "2024-06-26",
+      "value_date": "2024-06-26",
+      "description": "UPI/DR/664716002539/FOODKART/foodkart7@bank/PAYMENT",
+      "reference": "664716002539",
+      "debit": "477.94",
+      "credit": null,
+      "balance": "5967.61"
+    },
+    {
+      "date": "2024-06-27",
+      "value_date": "2024-06-27",
+      "description": "UPI/DR/648448704141/PAYWELL RECHARGE/paywellrec93@pay/PAYMENT",
+      "reference": "648448704141",
+      "debit": "210.00",
+      "credit": null,
+      "balance": "5757.61"
+    },
+    {
+      "date": "2024-06-28",
+      "value_date": "2024-06-28",
+      "description": "NEFT CR-ASTB29929955670-MAJUMDAR TEXTILES PVT LTD-SALARY JUN24",
+      "reference": "ASTB29929955670",
+      "debit": null,
+      "credit": "25620.00",
+      "balance": "31377.61"
+    },
+    {
+      "date": "2024-06-29",
+      "value_date": "2024-06-29",
+      "description": "UPI/DR/441981010286/MEDIPLUS PHARMACY/mediplusph29@pay/PAYMENT",
+      "reference": "441981010286",
+      "debit": "204.00",
+      "credit": null,
+      "balance": "31173.61"
+    },
+    {
+      "date": "2024-06-30",
+      "value_date": "2024-06-30",
+      "description": "INT.PD:01-04-24 TO 30-06-24",
+      "reference": null,
+      "debit": null,
+      "credit": "613.27",
+      "balance": "31786.88"
+    },
+    {
+      "date": "2024-06-30",
+      "value_date": "2024-06-30",
+      "description": "SMS ALERT CHARGES",
+      "reference": null,
+      "debit": "17.70",
+      "credit": null,
+      "balance": "31769.18"
+    },
+    {
+      "date": "2024-07-01",
+      "value_date": "2024-07-01",
+      "description": "UPI/DR/334343255447/HOMEFIX SERVICES/homefixser64@upi/PAYMENT",
+      "reference": "334343255447",
+      "debit": "299.00",
+      "credit": null,
+      "balance": "31470.18"
+    },
+    {
+      "date": "2024-07-02",
+      "value_date": "2024-07-02",
+      "description": "UPI/DR/862963838654/FUELSTOP/fuelstop71@pay/PAYMENT",
+      "reference": "862963838654",
+      "debit": "255.00",
+      "credit": null,
+      "balance": "31215.18"
+    },
+    {
+      "date": "2024-07-02",
+      "value_date": "2024-07-02",
+      "description": "ATM WDL-S1FKAYGQ-CHENNAI",
+      "reference": null,
+      "debit": "1000.00",
+      "credit": null,
+      "balance": "30215.18"
+    },
+    {
+      "date": "2024-07-03",
+      "value_date": "2024-07-03",
+      "description": "UPI/DR/762314759206/FUELSTOP/fuelstop65@bank/PAYMENT",
+      "reference": "762314759206",
+      "debit": "272.53",
+      "credit": null,
+      "balance": "29942.65"
+    },
+    {
+      "date": "2024-07-03",
+      "value_date": "2024-07-03",
+      "description": "UPI/DR/767049936540/MEDIPLUS PHARMACY/mediplusph39@upi/PAYMENT",
+      "reference": "767049936540",
+      "debit": "389.00",
+      "credit": null,
+      "balance": "29553.65"
+    },
+    {
+      "date": "2024-07-03",
+      "value_date": "2024-07-03",
+      "description": "UPI/DR/928686950502/FUELSTOP/fuelstop66@bank/PAYMENT",
+      "reference": "928686950502",
+      "debit": "98.80",
+      "credit": null,
+      "balance": "29454.85"
+    },
+    {
+      "date": "2024-07-05",
+      "value_date": "2024-07-05",
+      "description": "UPI/DR/570991999500/STREAMBOX/streambox29@bank/PAYMENT",
+      "reference": "570991999500",
+      "debit": "142.00",
+      "credit": null,
+      "balance": "29312.85"
+    },
+    {
+      "date": "2024-07-06",
+      "value_date": "2024-07-06",
+      "description": "UPI/DR/191985161885/STYLEHUB/stylehub91@pay/PAYMENT",
+      "reference": "191985161885",
+      "debit": "1774.00",
+      "credit": null,
+      "balance": "27538.85"
+    },
+    {
+      "date": "2024-07-06",
+      "value_date": "2024-07-06",
+      "description": "ATM WDL-S1JS1ASV-CHENNAI",
+      "reference": null,
+      "debit": "3000.00",
+      "credit": null,
+      "balance": "24538.85"
+    },
+    {
+      "date": "2024-07-07",
+      "value_date": "2024-07-07",
+      "description": "ACH D- NORTHSTAR HOME LOANS-18486740",
+      "reference": "ACH173104322",
+      "debit": "12800.92",
+      "credit": null,
+      "balance": "11737.93"
+    },
+    {
+      "date": "2024-07-09",
+      "value_date": "2024-07-09",
+      "description": "UPI/DR/240801482868/HOMEFIX SERVICES/homefixser92@upi/PAYMENT",
+      "reference": "240801482868",
+      "debit": "687.00",
+      "credit": null,
+      "balance": "11050.93"
+    },
+    {
+      "date": "2024-07-10",
+      "value_date": "2024-07-10",
+      "description": "UPI/DR/310743217760/HOMEFIX SERVICES/homefixser96@bank/PAYMENT",
+      "reference": "310743217760",
+      "debit": "349.00",
+      "credit": null,
+      "balance": "10701.93"
+    },
+    {
+      "date": "2024-07-11",
+      "value_date": "2024-07-12",
+      "description": "CHQ DEP-198310-CLG-JAIPUR",
+      "reference": "198310",
+      "debit": null,
+      "credit": "50913.81",
+      "balance": "61615.74"
+    },
+    {
+      "date": "2024-07-11",
+      "value_date": "2024-07-11",
+      "description": "UPI/DR/690879864498/BOOKNEST/booknest20@upi/PAYMENT",
+      "reference": "690879864498",
+      "debit": "307.00",
+      "credit": null,
+      "balance": "61308.74"
+    },
+    {
+      "date": "2024-07-12",
+      "value_date": "2024-07-12",
+      "description": "UPI/DR/519380110109/HOMEFIX SERVICES/homefixser71@pay/PAYMENT",
+      "reference": "519380110109",
+      "debit": "724.44",
+      "credit": null,
+      "balance": "60584.30"
+    },
+    {
+      "date": "2024-07-13",
+      "value_date": "2024-07-13",
+      "description": "UPI/DR/413694940984/STREAMBOX/streambox93@bank/PAYMENT",
+      "reference": "413694940984",
+      "debit": "1273.00",
+      "credit": null,
+      "balance": "59311.30"
+    },
+    {
+      "date": "2024-07-14",
+      "value_date": "2024-07-14",
+      "description": "UPI/CR/610908908990/MAX MANI/maxmani82@pay/UPI",
+      "reference": "610908908990",
+      "debit": null,
+      "credit": "2500.00",
+      "balance": "61811.30"
+    },
+    {
+      "date": "2024-07-15",
+      "value_date": "2024-07-15",
+      "description": "UPI/DR/284940078185/CITYCABS/citycabs54@pay/PAYMENT",
+      "reference": "284940078185",
+      "debit": "1228.00",
+      "credit": null,
+      "balance": "60583.30"
+    },
+    {
+      "date": "2024-07-15",
+      "value_date": "2024-07-15",
+      "description": "UPI/DR/533506333911/CITYCABS/citycabs66@upi/PAYMENT",
+      "reference": "533506333911",
+      "debit": "152.00",
+      "credit": null,
+      "balance": "60431.30"
+    },
+    {
+      "date": "2024-07-16",
+      "value_date": "2024-07-16",
+      "description": "UPI/DR/983090286895/BOOKNEST/booknest49@pay/PAYMENT",
+      "reference": "983090286895",
+      "debit": "342.68",
+      "credit": null,
+      "balance": "60088.62"
+    },
+    {
+      "date": "2024-07-17",
+      "value_date": "2024-07-17",
+      "description": "UPI/DR/985287503640/MEDIPLUS PHARMACY/mediplusph92@upi/PAYMENT",
+      "reference": "985287503640",
+      "debit": "145.29",
+      "credit": null,
+      "balance": "59943.33"
+    },
+    {
+      "date": "2024-07-17",
+      "value_date": "2024-07-17",
+      "description": "UPI/DR/302604809643/QUICKMART GROCERY/quickmartg43@pay/PAYMENT",
+      "reference": "302604809643",
+      "debit": "110.00",
+      "credit": null,
+      "balance": "59833.33"
+    },
+    {
+      "date": "2024-07-17",
+      "value_date": "2024-07-17",
+      "description": "POS XXXXXXXXXXXX3152 FUELSTOP",
+      "reference": null,
+      "debit": "1241.12",
+      "credit": null,
+      "balance": "58592.21"
+    },
+    {
+      "date": "2024-07-19",
+      "value_date": "2024-07-19",
+      "description": "BILLPAY/SKYNET BROADBAND/0867977238",
+      "reference": null,
+      "debit": "2806.55",
+      "credit": null,
+      "balance": "55785.66"
+    },
+    {
+      "date": "2024-07-20",
+      "value_date": "2024-07-20",
+      "description": "UPI/DR/521160119473/DAILYFRESH DAIRY/dailyfresh16@pay/PAYMENT",
+      "reference": "521160119473",
+      "debit": "268.00",
+      "credit": null,
+      "balance": "55517.66"
+    },
+    {
+      "date": "2024-07-21",
+      "value_date": "2024-07-21",
+      "description": "UPI/DR/103052394936/FUELSTOP/fuelstop53@upi/PAYMENT",
+      "reference": "103052394936",
+      "debit": "296.37",
+      "credit": null,
+      "balance": "55221.29"
+    },
+    {
+      "date": "2024-07-22",
+      "value_date": "2024-07-22",
+      "description": "UPI/CR/865705230530/HARINI WARRIOR/hariniwarr78@pay/UPI",
+      "reference": "865705230530",
+      "debit": null,
+      "credit": "1000.00",
+      "balance": "56221.29"
+    },
+    {
+      "date": "2024-07-22",
+      "value_date": "2024-07-22",
+      "description": "UPI/DR/006843466126/QUICKMART GROCERY/quickmartg64@upi/PAYMENT",
+      "reference": "006843466126",
+      "debit": "187.25",
+      "credit": null,
+      "balance": "56034.04"
+    },
+    {
+      "date": "2024-07-24",
+      "value_date": "2024-07-24",
+      "description": "NEFT DR-ASTB42838791934-BHAVANI RADHAKRISHNAN-TRANSFER",
+      "reference": "ASTB42838791934",
+      "debit": "17830.14",
+      "credit": null,
+      "balance": "38203.90"
+    },
+    {
+      "date": "2024-07-25",
+      "value_date": "2024-07-25",
+      "description": "UPI/DR/036353637580/FOODKART/foodkart44@pay/PAYMENT",
+      "reference": "036353637580",
+      "debit": "146.00",
+      "credit": null,
+      "balance": "38057.90"
+    },
+    {
+      "date": "2024-07-26",
+      "value_date": "2024-07-26",
+      "description": "UPI/DR/004136106464/PAYWELL RECHARGE/paywellrec2@pay/PAYMENT",
+      "reference": "004136106464",
+      "debit": "76.00",
+      "credit": null,
+      "balance": "37981.90"
+    },
+    {
+      "date": "2024-07-27",
+      "value_date": "2024-07-27",
+      "description": "UPI/DR/518642998252/STREAMBOX/streambox53@bank/PAYMENT",
+      "reference": "518642998252",
+      "debit": "295.41",
+      "credit": null,
+      "balance": "37686.49"
+    },
+    {
+      "date": "2024-07-27",
+      "value_date": "2024-07-27",
+      "description": "POS XXXXXXXXXXXX5095 FUELSTOP",
+      "reference": null,
+      "debit": "5561.17",
+      "credit": null,
+      "balance": "32125.32"
+    },
+    {
+      "date": "2024-07-28",
+      "value_date": "2024-07-28",
+      "description": "UPI/DR/672910403008/HOMEFIX SERVICES/homefixser85@upi/PAYMENT",
+      "reference": "672910403008",
+      "debit": "427.39",
+      "credit": null,
+      "balance": "31697.93"
+    },
+    {
+      "date": "2024-07-28",
+      "value_date": "2024-07-28",
+      "description": "UPI/DR/422196813199/FUELSTOP/fuelstop19@upi/PAYMENT",
+      "reference": "422196813199",
+      "debit": "255.00",
+      "credit": null,
+      "balance": "31442.93"
+    },
+    {
+      "date": "2024-07-29",
+      "value_date": "2024-07-29",
+      "description": "UPI/DR/024851721019/QUICKMART GROCERY/quickmartg21@upi/PAYMENT",
+      "reference": "024851721019",
+      "debit": "538.00",
+      "credit": null,
+      "balance": "30904.93"
+    },
+    {
+      "date": "2024-07-29",
+      "value_date": "2024-07-29",
+      "description": "UPI/DR/902337242610/CITYCABS/citycabs86@upi/PAYMENT",
+      "reference": "902337242610",
+      "debit": "68.00",
+      "credit": null,
+      "balance": "30836.93"
+    },
+    {
+      "date": "2024-07-31",
+      "value_date": "2024-07-31",
+      "description": "NEFT CR-ASTB41951048725-MAJUMDAR TEXTILES PVT LTD-SALARY JUL24",
+      "reference": "ASTB41951048725",
+      "debit": null,
+      "credit": "25620.00",
+      "balance": "56456.93"
+    }
+  ]
+}

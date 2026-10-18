@@ -1,0 +1,158 @@
+dataset_version: 1
+schema: pack:lending.bank_statement
+locale:
+  country: IN
+  currency: INR
+  dayfirst: true
+synthetic: true
+cases:
+- id: case_0001
+  tags:
+  - bank_a
+  - digital
+  rows: 211
+- id: case_0002
+  tags:
+  - bank_b
+  - digital
+  rows: 75
+- id: case_0003
+  tags:
+  - bank_c
+  - digital
+  rows: 196
+- id: case_0004
+  tags:
+  - bank_d
+  - digital
+  rows: 42
+- id: case_0005
+  tags:
+  - bank_e
+  - digital
+  rows: 151
+- id: case_0006
+  tags:
+  - bank_a
+  - digital
+  rows: 94
+- id: case_0007
+  tags:
+  - bank_b
+  - digital
+  rows: 161
+- id: case_0008
+  tags:
+  - bank_c
+  - digital
+  rows: 37
+- id: case_0009
+  tags:
+  - bank_d
+  - digital
+  rows: 137
+- id: case_0010
+  tags:
+  - bank_e
+  - digital
+  rows: 79
+- id: case_0011
+  tags:
+  - bank_a
+  - digital
+  rows: 95
+- id: case_0012
+  tags:
+  - bank_b
+  - digital
+  rows: 125
+- id: case_0013
+  tags:
+  - bank_c
+  - digital
+  rows: 77
+- id: case_0014
+  tags:
+  - bank_d
+  - digital
+  rows: 36
+- id: case_0015
+  tags:
+  - bank_e
+  - digital
+  rows: 178
+- id: case_0016
+  tags:
+  - bank_a
+  - digital
+  rows: 17
+- id: case_0017
+  tags:
+  - bank_b
+  - digital
+  rows: 141
+- id: case_0018
+  tags:
+  - bank_c
+  - digital
+  rows: 105
+- id: case_0019
+  tags:
+  - bank_d
+  - digital
+  rows: 151
+- id: case_0020
+  tags:
+  - bank_e
+  - digital
+  rows: 227
+- id: case_0021
+  tags:
+  - bank_a
+  - digital
+  rows: 121
+- id: case_0022
+  tags:
+  - bank_b
+  - digital
+  rows: 125
+- id: case_0023
+  tags:
+  - bank_c
+  - digital
+  rows: 237
+- id: case_0024
+  tags:
+  - bank_d
+  - digital
+  rows: 192
+- id: case_0025
+  tags:
+  - bank_e
+  - digital
+  rows: 107
+- id: case_0026
+  tags:
+  - bank_a
+  - digital
+  rows: 144
+- id: case_0027
+  tags:
+  - bank_b
+  - digital
+  rows: 213
+- id: case_0028
+  tags:
+  - bank_c
+  - digital
+  rows: 134
+- id: case_0029
+  tags:
+  - bank_d
+  - digital
+  rows: 185
+- id: case_0030
+  tags:
+  - bank_e
+  - digital
+  rows: 111
