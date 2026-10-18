@@ -6,6 +6,7 @@ python -m tools.synth bank --count 30 --layouts all --seed 7 --out evals/bank_st
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import sys
 from collections import Counter
@@ -14,6 +15,7 @@ from pathlib import Path
 from tools.synth.faker_providers import BANKS
 from tools.synth.layouts import LAYOUTS
 from tools.synth.ledger import LedgerGenerator
+from tools.synth.scan_sim import PROFILES, ScanSimulator
 from tools.synth.truth import bank_statement_expected, write_case, write_manifest
 
 
@@ -60,6 +62,54 @@ def _bank(args: argparse.Namespace) -> int:
     return 0
 
 
+def _scans(args: argparse.Namespace) -> int:
+    profiles = sorted(PROFILES) if args.profiles == "all" else args.profiles.split(",")
+    unknown = [name for name in profiles if name not in PROFILES]
+    if unknown:
+        print(
+            f"unknown profile(s): {', '.join(unknown)}; choose from {', '.join(sorted(PROFILES))}",
+            file=sys.stderr,
+        )
+        return 2
+
+    source = Path(args.source)
+    sources = sorted(p for p in source.glob("case_*") if (p / "document.pdf").exists())[
+        : args.count
+    ]
+    if not sources:
+        print(f"no cases with document.pdf under {source}", file=sys.stderr)
+        return 2
+
+    out = Path(args.out)
+    if out.exists() and args.clean:
+        shutil.rmtree(out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    cases = []
+    for src in sources:
+        source_meta = json.loads((src / "meta.json").read_text(encoding="utf-8"))
+        expected = json.loads((src / "expected.json").read_text(encoding="utf-8"))
+        pdf = (src / "document.pdf").read_bytes()
+        for profile_name in profiles:
+            seed = int(source_meta["seed"])
+            scan = ScanSimulator(PROFILES[profile_name], seed).simulate(pdf)
+            case_id = f"{src.name}_{profile_name}"
+            meta = {**source_meta, "profile": profile_name, "source_case": src.name}
+            write_case(out / case_id, document=scan, expected=expected, meta=meta)
+            cases.append(
+                {
+                    "id": case_id,
+                    "tags": [source_meta["layout"], profile_name, "scanned"],
+                    "rows": source_meta["rows"],
+                }
+            )
+            print(f"{case_id:28s} bytes={len(scan)}")
+
+    write_manifest(out, schema="pack:lending.bank_statement", cases=cases)
+    print(f"wrote {len(cases)} cases to {out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m tools.synth", description="Synthetic lending documents"
@@ -76,6 +126,14 @@ def main(argv: list[str] | None = None) -> int:
     bank.add_argument("--out", default="evals/bank_statement")
     bank.add_argument("--clean", action="store_true", help="delete the output folder first")
     bank.set_defaults(func=_bank)
+
+    scans = sub.add_parser("scans", help="scanned versions of existing digital cases")
+    scans.add_argument("--source", default="evals/bank_statement")
+    scans.add_argument("--profiles", default="all", help="'all' or comma list, e.g. clean,fax")
+    scans.add_argument("--count", type=int, default=10, help="first N source cases")
+    scans.add_argument("--out", default="evals/bank_statement_scans")
+    scans.add_argument("--clean", action="store_true", help="delete the output folder first")
+    scans.set_defaults(func=_scans)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
