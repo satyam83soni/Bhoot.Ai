@@ -1,0 +1,19 @@
+{
+  "kinds": {
+    "atm": 7,
+    "charges": 1,
+    "cheque": 1,
+    "emi": 7,
+    "interest": 1,
+    "neft_dr": 2,
+    "pos": 3,
+    "salary": 4,
+    "upi_cr": 8,
+    "upi_dr": 88,
+    "utility": 3
+  },
+  "layout": "bank_b",
+  "profile": "digital",
+  "rows": 125,
+  "seed": 70021
+}

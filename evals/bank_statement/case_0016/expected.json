@@ -1,0 +1,169 @@
+{
+  "bank_name": "Aster Bank Ltd",
+  "account_holder": "Andrew Parmer",
+  "account_number": "713173147536",
+  "ifsc": "ASTR0BWMK2L",
+  "account_type": "savings",
+  "currency": "INR",
+  "period": {
+    "from_date": "2024-02-01",
+    "to_date": "2024-02-29"
+  },
+  "opening_balance": "130589.34",
+  "closing_balance": "143912.89",
+  "transactions": [
+    {
+      "date": "2024-02-03",
+      "value_date": "2024-02-03",
+      "description": "UPI/DR/906414261495/QUICKMART GROCERY/quickmartg14@pay/PAYMENT",
+      "reference": "906414261495",
+      "debit": "724.15",
+      "credit": null,
+      "balance": "129865.19"
+    },
+    {
+      "date": "2024-02-04",
+      "value_date": "2024-02-04",
+      "description": "ATM WDL-S1C2KTUR-HYDERABAD",
+      "reference": null,
+      "debit": "3000.00",
+      "credit": null,
+      "balance": "126865.19"
+    },
+    {
+      "date": "2024-02-06",
+      "value_date": "2024-02-06",
+      "description": "UPI/DR/607805855763/TRAVELNEST/travelnest36@bank/PAYMENT",
+      "reference": "607805855763",
+      "debit": "317.00",
+      "credit": null,
+      "balance": "126548.19"
+    },
+    {
+      "date": "2024-02-07",
+      "value_date": "2024-02-07",
+      "description": "NEFT DR-ASTB60789669892-AMARA NAGY-TRANSFER",
+      "reference": "ASTB60789669892",
+      "debit": "13611.14",
+      "credit": null,
+      "balance": "112937.05"
+    },
+    {
+      "date": "2024-02-09",
+      "value_date": "2024-02-09",
+      "description": "UPI/DR/561378008126/CITYCABS/citycabs94@pay/PAYMENT",
+      "reference": "561378008126",
+      "debit": "462.44",
+      "credit": null,
+      "balance": "112474.61"
+    },
+    {
+      "date": "2024-02-12",
+      "value_date": "2024-02-12",
+      "description": "UPI/DR/084165433067/DAILYFRESH DAIRY/dailyfresh13@upi/PAYMENT",
+      "reference": "084165433067",
+      "debit": "209.32",
+      "credit": null,
+      "balance": "112265.29"
+    },
+    {
+      "date": "2024-02-13",
+      "value_date": "2024-02-13",
+      "description": "UPI/DR/038477558855/PAYWELL RECHARGE/paywellrec69@bank/PAYMENT",
+      "reference": "038477558855",
+      "debit": "525.36",
+      "credit": null,
+      "balance": "111739.93"
+    },
+    {
+      "date": "2024-02-15",
+      "value_date": "2024-02-15",
+      "description": "UPI/DR/451472552293/QUICKMART GROCERY/quickmartg98@pay/PAYMENT",
+      "reference": "451472552293",
+      "debit": "263.67",
+      "credit": null,
+      "balance": "111476.26"
+    },
+    {
+      "date": "2024-02-16",
+      "value_date": "2024-02-16",
+      "description": "BILLPAY/METRO GAS LTD/6631502796",
+      "reference": null,
+      "debit": "3201.18",
+      "credit": null,
+      "balance": "108275.08"
+    },
+    {
+      "date": "2024-02-18",
+      "value_date": "2024-02-18",
+      "description": "UPI/DR/165371656484/BOOKNEST/booknest9@pay/PAYMENT",
+      "reference": "165371656484",
+      "debit": "113.00",
+      "credit": null,
+      "balance": "108162.08"
+    },
+    {
+      "date": "2024-02-19",
+      "value_date": "2024-02-19",
+      "description": "POS XXXXXXXXXXXX9377 TRAVELNEST",
+      "reference": null,
+      "debit": "446.37",
+      "credit": null,
+      "balance": "107715.71"
+    },
+    {
+      "date": "2024-02-21",
+      "value_date": "2024-02-21",
+      "description": "ATM WDL-S1AL92HM-MUMBAI",
+      "reference": null,
+      "debit": "2000.00",
+      "credit": null,
+      "balance": "105715.71"
+    },
+    {
+      "date": "2024-02-23",
+      "value_date": "2024-02-23",
+      "description": "UPI/DR/146967019790/STREAMBOX/streambox23@upi/PAYMENT",
+      "reference": "146967019790",
+      "debit": "381.00",
+      "credit": null,
+      "balance": "105334.71"
+    },
+    {
+      "date": "2024-02-24",
+      "value_date": "2024-02-24",
+      "description": "UPI/DR/791895491260/FUELSTOP/fuelstop61@pay/PAYMENT",
+      "reference": "791895491260",
+      "debit": "163.78",
+      "credit": null,
+      "balance": "105170.93"
+    },
+    {
+      "date": "2024-02-25",
+      "value_date": "2024-02-25",
+      "description": "UPI/DR/728152847943/TRAVELNEST/travelnest92@bank/PAYMENT",
+      "reference": "728152847943",
+      "debit": "131.04",
+      "credit": null,
+      "balance": "105039.89"
+    },
+    {
+      "date": "2024-02-27",
+      "value_date": "2024-02-27",
+      "description": "UPI/DR/332585823780/MEDIPLUS PHARMACY/mediplusph59@upi/PAYMENT",
+      "reference": "332585823780",
+      "debit": "187.00",
+      "credit": null,
+      "balance": "104852.89"
+    },
+    {
+      "date": "2024-02-29",
+      "value_date": "2024-02-29",
+      "description": "NEFT CR-ASTB44903187878-RASTOGI INDUSTRIES PVT LTD-SALARY FEB24",
+      "reference": "ASTB44903187878",
+      "debit": null,
+      "credit": "39060.00",
+      "balance": "143912.89"
+    }
+  ]
+}
