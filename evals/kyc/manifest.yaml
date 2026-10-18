@@ -1,0 +1,88 @@
+dataset_version: 1
+schema: pack:lending.kyc
+locale:
+  country: IN
+  currency: INR
+  dayfirst: true
+synthetic: true
+cases:
+- id: case_0001
+  tags:
+  - pan
+  - image
+- id: case_0002
+  tags:
+  - aadhaar
+  - image
+- id: case_0003
+  tags:
+  - passport
+  - image
+- id: case_0004
+  tags:
+  - driving_licence
+  - image
+- id: case_0005
+  tags:
+  - voter_id
+  - image
+- id: case_0006
+  tags:
+  - pan
+  - digital
+- id: case_0007
+  tags:
+  - aadhaar
+  - digital
+- id: case_0008
+  tags:
+  - passport
+  - digital
+- id: case_0009
+  tags:
+  - driving_licence
+  - digital
+- id: case_0010
+  tags:
+  - voter_id
+  - digital
+- id: case_0011
+  tags:
+  - pan
+  - image
+- id: case_0012
+  tags:
+  - aadhaar
+  - image
+- id: case_0013
+  tags:
+  - passport
+  - image
+- id: case_0014
+  tags:
+  - driving_licence
+  - image
+- id: case_0015
+  tags:
+  - voter_id
+  - image
+- id: case_0016
+  tags:
+  - pan
+  - digital
+- id: case_0017
+  tags:
+  - aadhaar
+  - digital
+- id: case_0018
+  tags:
+  - passport
+  - digital
+- id: case_0019
+  tags:
+  - driving_licence
+  - digital
+- id: case_0020
+  tags:
+  - voter_id
+  - digital

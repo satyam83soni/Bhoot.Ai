@@ -14,6 +14,7 @@ from typing import Any
 
 import yaml
 
+from tools.synth.kyc import KycDocument
 from tools.synth.ledger import Ledger
 from tools.synth.salary import SalarySlip
 
@@ -73,6 +74,22 @@ def salary_slip_expected(slip: SalarySlip) -> dict[str, Any]:
         "total_deductions": _amount(slip.total_deductions),
         "net_pay": _amount(slip.net_pay),
         "bank_account_last4": slip.bank_account_last4,
+    }
+
+
+def kyc_expected(doc: KycDocument) -> dict[str, Any]:
+    """Shape of the ``lending.kyc`` pack schema (LLD §9.24.3). ``id_number`` is what was
+    printed (a masked Aadhaar stays masked)."""
+    return {
+        "document_type": doc.document_type,
+        "id_number": doc.id_number,
+        "name": doc.name,
+        "father_or_spouse_name": doc.father_or_spouse_name,
+        "date_of_birth": doc.date_of_birth.isoformat() if doc.date_of_birth else None,
+        "gender": doc.gender,
+        "address": doc.address,
+        "issue_date": doc.issue_date.isoformat() if doc.issue_date else None,
+        "expiry_date": doc.expiry_date.isoformat() if doc.expiry_date else None,
     }
 
 
