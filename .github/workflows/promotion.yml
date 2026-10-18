@@ -1,0 +1,25 @@
+name: Promotion order
+
+# Enforces the release path: feature/* → dev → uat → prod.
+# A PR into uat must come from dev; a PR into prod must come from uat.
+
+on:
+  pull_request:
+    branches: [uat, prod]
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that the PR follows dev → uat → prod
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          if [ "$BASE" = "uat" ] && [ "$HEAD" != "dev" ]; then
+            echo "PRs into uat must come from dev (got: $HEAD)"; exit 1
+          fi
+          if [ "$BASE" = "prod" ] && [ "$HEAD" != "uat" ]; then
+            echo "PRs into prod must come from uat (got: $HEAD)"; exit 1
+          fi
+          echo "OK: $HEAD → $BASE"
