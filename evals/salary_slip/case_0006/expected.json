@@ -1,0 +1,47 @@
+{
+  "employer_name": "MANDER INDUSTRIES PVT LTD",
+  "employee_name": "Saanvi Sarna",
+  "employee_id": "EMP77462",
+  "pan": "VCGPS8611G",
+  "uan": "100486315018",
+  "pay_period": {
+    "month": 9,
+    "year": 2026
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "13920.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "6960.00"
+    },
+    {
+      "component": "CONV. ALLOW.",
+      "amount": "1547.00"
+    },
+    {
+      "component": "MED. ALLOW.",
+      "amount": "1208.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "7298.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "1670.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    }
+  ],
+  "gross_earnings": "30933.00",
+  "total_deductions": "1870.00",
+  "net_pay": "29063.00",
+  "bank_account_last4": "8703"
+}

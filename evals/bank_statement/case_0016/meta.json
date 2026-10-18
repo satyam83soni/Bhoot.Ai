@@ -1,0 +1,14 @@
+{
+  "kinds": {
+    "atm": 2,
+    "neft_dr": 1,
+    "pos": 1,
+    "salary": 1,
+    "upi_dr": 11,
+    "utility": 1
+  },
+  "layout": "bank_a",
+  "profile": "digital",
+  "rows": 17,
+  "seed": 70015
+}

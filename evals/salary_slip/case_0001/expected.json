@@ -1,0 +1,55 @@
+{
+  "employer_name": "BAKSHI SERVICES PVT LTD",
+  "employee_name": "Vivaan Palla",
+  "employee_id": "EMP35090",
+  "pan": "HLUPP6236C",
+  "uan": null,
+  "pay_period": {
+    "month": 6,
+    "year": 2025
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "34000.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "13600.00"
+    },
+    {
+      "component": "CONV. ALLOW.",
+      "amount": "1600.00"
+    },
+    {
+      "component": "MED. ALLOW.",
+      "amount": "1250.00"
+    },
+    {
+      "component": "L.T.A.",
+      "amount": "2832.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "31718.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "4080.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    },
+    {
+      "component": "TDS",
+      "amount": "2667.00"
+    }
+  ],
+  "gross_earnings": "85000.00",
+  "total_deductions": "6947.00",
+  "net_pay": "78053.00",
+  "bank_account_last4": "7669"
+}

@@ -1,0 +1,14 @@
+{
+  "kinds": {
+    "atm": 1,
+    "pos": 3,
+    "rent": 1,
+    "salary": 1,
+    "upi_dr": 35,
+    "utility": 1
+  },
+  "layout": "bank_d",
+  "profile": "digital",
+  "rows": 42,
+  "seed": 70003
+}

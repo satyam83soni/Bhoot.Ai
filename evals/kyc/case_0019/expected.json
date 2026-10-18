@@ -1,0 +1,11 @@
+{
+  "document_type": "driving_licence",
+  "id_number": "WB0220182907050",
+  "name": "FAQID BARAL",
+  "father_or_spouse_name": "VINCENT BARAL",
+  "date_of_birth": "2004-03-07",
+  "gender": "male",
+  "address": "H.No. 077, Date Street, Amritsar 193364",
+  "issue_date": "2018-09-30",
+  "expiry_date": "2038-03-07"
+}

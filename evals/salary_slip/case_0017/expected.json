@@ -1,0 +1,51 @@
+{
+  "employer_name": "UPPAL TECHNOLOGIES PVT LTD",
+  "employee_name": "Thomas Sarkar",
+  "employee_id": "EMP36892",
+  "pan": "EJJPS0567D",
+  "uan": "101760942261",
+  "pay_period": {
+    "month": 3,
+    "year": 2025
+  },
+  "earnings": [
+    {
+      "component": "Basic",
+      "amount": "130000.00"
+    },
+    {
+      "component": "HRA",
+      "amount": "52000.00"
+    },
+    {
+      "component": "Conveyance",
+      "amount": "1600.00"
+    },
+    {
+      "component": "Medical",
+      "amount": "1250.00"
+    },
+    {
+      "component": "LTA",
+      "amount": "10829.00"
+    },
+    {
+      "component": "Special Allowance",
+      "amount": "64321.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "PF",
+      "amount": "1800.00"
+    },
+    {
+      "component": "TDS",
+      "amount": "20167.00"
+    }
+  ],
+  "gross_earnings": "260000.00",
+  "total_deductions": "21967.00",
+  "net_pay": "238033.00",
+  "bank_account_last4": "5818"
+}

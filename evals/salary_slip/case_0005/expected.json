@@ -1,0 +1,51 @@
+{
+  "employer_name": "DYAL SERVICES PVT LTD",
+  "employee_name": "Aditya Parikh",
+  "employee_id": "EMP05279",
+  "pan": "MGCPP7067Q",
+  "uan": "107399353788",
+  "pay_period": {
+    "month": 1,
+    "year": 2024
+  },
+  "earnings": [
+    {
+      "component": "Basic Salary",
+      "amount": "14400.00"
+    },
+    {
+      "component": "House Rent Allowance",
+      "amount": "7200.00"
+    },
+    {
+      "component": "Conveyance Allowance",
+      "amount": "1600.00"
+    },
+    {
+      "component": "Medical Allowance",
+      "amount": "1250.00"
+    },
+    {
+      "component": "Special Allowance",
+      "amount": "7550.00"
+    },
+    {
+      "component": "Performance Bonus",
+      "amount": "2500.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "Provident Fund",
+      "amount": "1728.00"
+    },
+    {
+      "component": "Professional Tax",
+      "amount": "200.00"
+    }
+  ],
+  "gross_earnings": "34500.00",
+  "total_deductions": "1928.00",
+  "net_pay": "32572.00",
+  "bank_account_last4": "7371"
+}

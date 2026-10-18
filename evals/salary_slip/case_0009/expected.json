@@ -1,0 +1,51 @@
+{
+  "employer_name": "GROVER INDUSTRIES PVT LTD",
+  "employee_name": "Lekha Puri",
+  "employee_id": "EMP66282",
+  "pan": "LHKPP7173X",
+  "uan": "104036925818",
+  "pay_period": {
+    "month": 3,
+    "year": 2025
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "48000.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "19200.00"
+    },
+    {
+      "component": "CONV. ALLOW.",
+      "amount": "1600.00"
+    },
+    {
+      "component": "MED. ALLOW.",
+      "amount": "1250.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "49950.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "5760.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    },
+    {
+      "component": "TDS",
+      "amount": "6167.00"
+    }
+  ],
+  "gross_earnings": "120000.00",
+  "total_deductions": "12127.00",
+  "net_pay": "107873.00",
+  "bank_account_last4": "0881"
+}

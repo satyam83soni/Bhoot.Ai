@@ -1,0 +1,55 @@
+{
+  "employer_name": "BHAVSAR SERVICES PVT LTD",
+  "employee_name": "Neel Sangha",
+  "employee_id": "EMP26179",
+  "pan": "BAFPS3401L",
+  "uan": "101855263513",
+  "pay_period": {
+    "month": 11,
+    "year": 2024
+  },
+  "earnings": [
+    {
+      "component": "Basic Salary",
+      "amount": "44800.00"
+    },
+    {
+      "component": "House Rent Allowance",
+      "amount": "22400.00"
+    },
+    {
+      "component": "Conveyance Allowance",
+      "amount": "1493.00"
+    },
+    {
+      "component": "Medical Allowance",
+      "amount": "1167.00"
+    },
+    {
+      "component": "Special Allowance",
+      "amount": "42140.00"
+    },
+    {
+      "component": "Performance Bonus",
+      "amount": "2500.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "Provident Fund",
+      "amount": "1800.00"
+    },
+    {
+      "component": "Professional Tax",
+      "amount": "200.00"
+    },
+    {
+      "component": "Income Tax",
+      "amount": "5617.00"
+    }
+  ],
+  "gross_earnings": "114500.00",
+  "total_deductions": "7617.00",
+  "net_pay": "106883.00",
+  "bank_account_last4": "9578"
+}
