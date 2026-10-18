@@ -140,8 +140,13 @@ def test_model_resolution_and_vision_fallback() -> None:
         _tiers().resolve("cheap", needs_vision=True, has_vision=sees)
     with pytest.raises(ModelConfigError, match="no 'cross' model"):
         _tiers().resolve("cross", needs_vision=False, has_vision=sees)
-    forced = _tiers(cheap=ModelSpec(model="local/x", vision=True))
-    assert forced.resolve("cheap", needs_vision=True, has_vision=lambda _: False).model == "local/x"
+    forced = _tiers(
+        cheap=ModelSpec(model="x", provider="openai", api_base="http://gpu:8000/v1", vision=True)
+    )
+    assert (
+        forced.resolve("cheap", needs_vision=True, has_vision=lambda _: False).model_id
+        == "openai/x"
+    )
 
 
 def test_models_from_file_and_settings_are_frozen(project: Path) -> None:
