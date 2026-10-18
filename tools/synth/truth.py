@@ -15,6 +15,7 @@ from typing import Any
 import yaml
 
 from tools.synth.ledger import Ledger
+from tools.synth.salary import SalarySlip
 
 DATASET_VERSION = 1
 
@@ -50,6 +51,28 @@ def bank_statement_expected(ledger: Ledger) -> dict[str, Any]:
             }
             for t in ledger.transactions
         ],
+    }
+
+
+def salary_slip_expected(slip: SalarySlip) -> dict[str, Any]:
+    """Shape of the ``lending.salary_slip`` pack schema (LLD §9.24.2)."""
+    return {
+        "employer_name": slip.employer_name,
+        "employee_name": slip.employee_name,
+        "employee_id": slip.employee_id,
+        "pan": slip.pan,
+        "uan": slip.uan,
+        "pay_period": {"month": slip.pay_month, "year": slip.pay_year},
+        "earnings": [
+            {"component": e.component, "amount": _amount(e.amount)} for e in slip.earnings
+        ],
+        "deductions": [
+            {"component": d.component, "amount": _amount(d.amount)} for d in slip.deductions
+        ],
+        "gross_earnings": _amount(slip.gross_earnings),
+        "total_deductions": _amount(slip.total_deductions),
+        "net_pay": _amount(slip.net_pay),
+        "bank_account_last4": slip.bank_account_last4,
     }
 
 

@@ -1,0 +1,47 @@
+{
+  "employer_name": "NARANG INDUSTRIES PVT LTD",
+  "employee_name": "Xalak Jayaraman",
+  "employee_id": "EMP78351",
+  "pan": "YJMPJ5924G",
+  "uan": "108536214059",
+  "pay_period": {
+    "month": 8,
+    "year": 2026
+  },
+  "earnings": [
+    {
+      "component": "Basic",
+      "amount": "19597.00"
+    },
+    {
+      "component": "HRA",
+      "amount": "7839.00"
+    },
+    {
+      "component": "Conveyance",
+      "amount": "1548.00"
+    },
+    {
+      "component": "Medical",
+      "amount": "1210.00"
+    },
+    {
+      "component": "Special Allowance",
+      "amount": "13355.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "PF",
+      "amount": "2352.00"
+    },
+    {
+      "component": "Professional Tax",
+      "amount": "200.00"
+    }
+  ],
+  "gross_earnings": "43549.00",
+  "total_deductions": "2552.00",
+  "net_pay": "40997.00",
+  "bank_account_last4": "9693"
+}
