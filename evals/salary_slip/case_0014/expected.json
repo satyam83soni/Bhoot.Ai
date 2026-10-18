@@ -1,0 +1,39 @@
+{
+  "employer_name": "BHAVSAR INDUSTRIES PVT LTD",
+  "employee_name": "Ijaya Chaudry",
+  "employee_id": "EMP51191",
+  "pan": "GEGPC9953C",
+  "uan": "109106192666",
+  "pay_period": {
+    "month": 4,
+    "year": 2025
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "12000.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "4800.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "7200.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "1440.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    }
+  ],
+  "gross_earnings": "24000.00",
+  "total_deductions": "1640.00",
+  "net_pay": "22360.00",
+  "bank_account_last4": "4042"
+}

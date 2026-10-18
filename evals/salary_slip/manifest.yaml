@@ -1,0 +1,88 @@
+dataset_version: 1
+schema: pack:lending.salary_slip
+locale:
+  country: IN
+  currency: INR
+  dayfirst: true
+synthetic: true
+cases:
+- id: case_0001
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0002
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0003
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0004
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0005
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0006
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0007
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0008
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0009
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0010
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0011
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0012
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0013
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0014
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0015
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0016
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0017
+  tags:
+  - salary_side_by_side
+  - digital
+- id: case_0018
+  tags:
+  - salary_stacked
+  - digital
+- id: case_0019
+  tags:
+  - salary_boxed
+  - digital
+- id: case_0020
+  tags:
+  - salary_side_by_side
+  - digital

@@ -14,9 +14,16 @@ from pathlib import Path
 
 from tools.synth.faker_providers import BANKS
 from tools.synth.layouts import LAYOUTS
+from tools.synth.layouts.salary_layouts import SALARY_LAYOUTS
 from tools.synth.ledger import LedgerGenerator
+from tools.synth.salary import SalarySlipGenerator
 from tools.synth.scan_sim import PROFILES, ScanSimulator
-from tools.synth.truth import bank_statement_expected, write_case, write_manifest
+from tools.synth.truth import (
+    bank_statement_expected,
+    salary_slip_expected,
+    write_case,
+    write_manifest,
+)
 
 
 def _bank(args: argparse.Namespace) -> int:
@@ -110,6 +117,30 @@ def _scans(args: argparse.Namespace) -> int:
     return 0
 
 
+def _salary(args: argparse.Namespace) -> int:
+    out = Path(args.out)
+    if out.exists() and args.clean:
+        shutil.rmtree(out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    layouts = sorted(SALARY_LAYOUTS)
+    cases = []
+    for i in range(args.count):
+        seed = args.seed * 10_000 + i
+        layout = SALARY_LAYOUTS[layouts[i % len(layouts)]]()
+        slip = SalarySlipGenerator(seed).generate()
+        pdf = layout.render(slip)
+        case_id = f"case_{i + 1:04d}"
+        meta = {"seed": seed, "layout": layout.name, "profile": "digital"}
+        write_case(out / case_id, document=pdf, expected=salary_slip_expected(slip), meta=meta)
+        cases.append({"id": case_id, "tags": [layout.name, "digital"]})
+        print(f"{case_id}  {layout.name:22s} net={slip.net_pay}")
+
+    write_manifest(out, schema="pack:lending.salary_slip", cases=cases)
+    print(f"wrote {len(cases)} cases to {out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m tools.synth", description="Synthetic lending documents"
@@ -134,6 +165,13 @@ def main(argv: list[str] | None = None) -> int:
     scans.add_argument("--out", default="evals/bank_statement_scans")
     scans.add_argument("--clean", action="store_true", help="delete the output folder first")
     scans.set_defaults(func=_scans)
+
+    salary = sub.add_parser("salary", help="salary slips")
+    salary.add_argument("--count", type=int, default=20)
+    salary.add_argument("--seed", type=int, default=11)
+    salary.add_argument("--out", default="evals/salary_slip")
+    salary.add_argument("--clean", action="store_true", help="delete the output folder first")
+    salary.set_defaults(func=_salary)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
