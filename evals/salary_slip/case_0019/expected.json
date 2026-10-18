@@ -1,0 +1,59 @@
+{
+  "employer_name": "CHAWLA TEXTILES PVT LTD",
+  "employee_name": "Alka Nagy",
+  "employee_id": "EMP45145",
+  "pan": "WEHPN0315C",
+  "uan": null,
+  "pay_period": {
+    "month": 8,
+    "year": 2026
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "34000.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "17000.00"
+    },
+    {
+      "component": "CONV. ALLOW.",
+      "amount": "1600.00"
+    },
+    {
+      "component": "MED. ALLOW.",
+      "amount": "1250.00"
+    },
+    {
+      "component": "L.T.A.",
+      "amount": "2832.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "28318.00"
+    },
+    {
+      "component": "INCENTIVE",
+      "amount": "2500.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "1800.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    },
+    {
+      "component": "TDS",
+      "amount": "2917.00"
+    }
+  ],
+  "gross_earnings": "87500.00",
+  "total_deductions": "4917.00",
+  "net_pay": "82583.00",
+  "bank_account_last4": "2921"
+}

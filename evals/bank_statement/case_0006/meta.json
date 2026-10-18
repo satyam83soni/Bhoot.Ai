@@ -1,0 +1,15 @@
+{
+  "kinds": {
+    "atm": 5,
+    "cheque": 1,
+    "pos": 3,
+    "salary": 2,
+    "upi_cr": 6,
+    "upi_dr": 75,
+    "utility": 2
+  },
+  "layout": "bank_a",
+  "profile": "digital",
+  "rows": 94,
+  "seed": 70005
+}

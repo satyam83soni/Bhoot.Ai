@@ -2,15 +2,19 @@
 root_package = bhoot
 include_external_packages = True
 
+# Layer rules: System_Design_v0.1.md §3.3
+
 [importlinter:contract:domain-is-pure]
-name = Domain imports no engine, ports, adapters or infrastructure libraries
+name = Domain imports no other bhoot layer or infrastructure library
 type = forbidden
 source_modules =
     bhoot.domain
 forbidden_modules =
+    bhoot.config
     bhoot.engine
     bhoot.ports
     bhoot.adapters
+    bhoot.packs
     bhoot.api
     bhoot.cli
     langgraph
@@ -26,18 +30,34 @@ type = forbidden
 source_modules =
     bhoot.ports
 forbidden_modules =
+    bhoot.config
     bhoot.engine
     bhoot.adapters
+    bhoot.packs
+    bhoot.api
+    bhoot.cli
+
+[importlinter:contract:config-below-engine]
+name = Config depends only on the domain
+type = forbidden
+source_modules =
+    bhoot.config
+forbidden_modules =
+    bhoot.engine
+    bhoot.ports
+    bhoot.adapters
+    bhoot.packs
     bhoot.api
     bhoot.cli
 
 [importlinter:contract:engine-never-imports-adapters]
-name = Engine depends on ports, never on concrete adapters
+name = Engine depends on ports, never on concrete adapters or packs
 type = forbidden
 source_modules =
     bhoot.engine
 forbidden_modules =
     bhoot.adapters
+    bhoot.packs
     bhoot.api
     bhoot.cli
     litellm
@@ -47,11 +67,34 @@ forbidden_modules =
     cv2
 
 [importlinter:contract:adapters-not-engine-internals]
-name = Adapters do not import the engine
+name = Adapters do not import the engine or packs
 type = forbidden
 source_modules =
     bhoot.adapters
 forbidden_modules =
     bhoot.engine
+    bhoot.packs
     bhoot.api
     bhoot.cli
+
+[importlinter:contract:packs-use-domain-and-rule-library]
+name = Built-in packs use the domain and the rule library only
+type = forbidden
+source_modules =
+    bhoot.packs
+forbidden_modules =
+    bhoot.ports
+    bhoot.adapters
+    bhoot.api
+    bhoot.cli
+    bhoot.engine.graph
+    bhoot.engine.nodes
+    bhoot.engine.planning
+    bhoot.engine.prompting
+    bhoot.engine.schema_compiler
+    bhoot.engine.normalize
+    bhoot.engine.verification
+    bhoot.engine.policy
+    bhoot.engine.crosscheck
+    bhoot.engine.merge
+    bhoot.engine.cost

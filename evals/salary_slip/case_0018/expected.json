@@ -1,0 +1,43 @@
+{
+  "employer_name": "SAINI INDUSTRIES PVT LTD",
+  "employee_name": "Dakshesh Raman",
+  "employee_id": "EMP90667",
+  "pan": "KSHPR6890U",
+  "uan": "105936898350",
+  "pay_period": {
+    "month": 11,
+    "year": 2024
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "8048.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "4024.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "5812.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "966.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    },
+    {
+      "component": "E.S.I.",
+      "amount": "135.00"
+    }
+  ],
+  "gross_earnings": "17884.00",
+  "total_deductions": "1301.00",
+  "net_pay": "16583.00",
+  "bank_account_last4": "9036"
+}

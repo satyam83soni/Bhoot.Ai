@@ -1,0 +1,16 @@
+{
+  "kinds": {
+    "atm": 3,
+    "charges": 1,
+    "interest": 1,
+    "rent": 1,
+    "salary": 1,
+    "upi_cr": 1,
+    "upi_dr": 28,
+    "utility": 1
+  },
+  "layout": "bank_c",
+  "profile": "digital",
+  "rows": 37,
+  "seed": 70007
+}

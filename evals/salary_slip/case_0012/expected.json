@@ -1,0 +1,51 @@
+{
+  "employer_name": "PANT INDUSTRIES PVT LTD",
+  "employee_name": "Nachiket Bhatti",
+  "employee_id": "EMP21569",
+  "pan": "FQKPB0604Y",
+  "uan": "108366114433",
+  "pay_period": {
+    "month": 10,
+    "year": 2024
+  },
+  "earnings": [
+    {
+      "component": "Basic",
+      "amount": "42500.00"
+    },
+    {
+      "component": "HRA",
+      "amount": "21250.00"
+    },
+    {
+      "component": "Conveyance",
+      "amount": "1600.00"
+    },
+    {
+      "component": "Medical",
+      "amount": "1250.00"
+    },
+    {
+      "component": "Special Allowance",
+      "amount": "18400.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "PF",
+      "amount": "5100.00"
+    },
+    {
+      "component": "Professional Tax",
+      "amount": "200.00"
+    },
+    {
+      "component": "TDS",
+      "amount": "2667.00"
+    }
+  ],
+  "gross_earnings": "85000.00",
+  "total_deductions": "7967.00",
+  "net_pay": "77033.00",
+  "bank_account_last4": "2121"
+}

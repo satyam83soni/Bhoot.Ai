@@ -1,0 +1,47 @@
+{
+  "employer_name": "GERA INDUSTRIES PVT LTD",
+  "employee_name": "Bhavani Jhaveri",
+  "employee_id": "EMP43243",
+  "pan": "NLIPJ1032I",
+  "uan": "108393460858",
+  "pay_period": {
+    "month": 11,
+    "year": 2024
+  },
+  "earnings": [
+    {
+      "component": "BASIC",
+      "amount": "18000.00"
+    },
+    {
+      "component": "H.R.A.",
+      "amount": "9000.00"
+    },
+    {
+      "component": "CONV. ALLOW.",
+      "amount": "1600.00"
+    },
+    {
+      "component": "MED. ALLOW.",
+      "amount": "1250.00"
+    },
+    {
+      "component": "SPL. ALLOW.",
+      "amount": "15150.00"
+    }
+  ],
+  "deductions": [
+    {
+      "component": "EPF",
+      "amount": "1800.00"
+    },
+    {
+      "component": "P.TAX",
+      "amount": "200.00"
+    }
+  ],
+  "gross_earnings": "45000.00",
+  "total_deductions": "2000.00",
+  "net_pay": "43000.00",
+  "bank_account_last4": "5082"
+}

@@ -1,0 +1,15 @@
+{
+  "kinds": {
+    "atm": 1,
+    "emi": 1,
+    "pos": 1,
+    "salary": 1,
+    "upi_cr": 1,
+    "upi_dr": 30,
+    "utility": 1
+  },
+  "layout": "bank_d",
+  "profile": "digital",
+  "rows": 36,
+  "seed": 70013
+}
