@@ -40,6 +40,10 @@ htmlcov/
 !evals/**/*.png
 !evals/**/*.jpg
 
+# Scanned eval sets are large (tens of MB) and fully reproducible:
+#   python -m tools.synth scans --count 10 --clean
+evals/*_scans/
+
 # Code only in this repository: no documentation (design docs, guides, notes).
 # README.md stays because pyproject.toml uses it as the package description.
 docs/
