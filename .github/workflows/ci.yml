@@ -40,5 +40,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
       - run: uv python install ${{ matrix.python }}
-      - run: uv sync --group dev --python ${{ matrix.python }}
+      - run: uv sync --group dev --group tools --python ${{ matrix.python }}
       - run: uv run pytest -m "not live" --cov --cov-report=term-missing
