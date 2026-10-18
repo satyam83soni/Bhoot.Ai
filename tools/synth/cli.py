@@ -13,13 +13,16 @@ from collections import Counter
 from pathlib import Path
 
 from tools.synth.faker_providers import BANKS
+from tools.synth.kyc import KYC_TYPES, KycGenerator
 from tools.synth.layouts import LAYOUTS
+from tools.synth.layouts.kyc_layouts import render as render_kyc
 from tools.synth.layouts.salary_layouts import SALARY_LAYOUTS
 from tools.synth.ledger import LedgerGenerator
 from tools.synth.salary import SalarySlipGenerator
 from tools.synth.scan_sim import PROFILES, ScanSimulator
 from tools.synth.truth import (
     bank_statement_expected,
+    kyc_expected,
     salary_slip_expected,
     write_case,
     write_manifest,
@@ -141,6 +144,30 @@ def _salary(args: argparse.Namespace) -> int:
     return 0
 
 
+def _kyc(args: argparse.Namespace) -> int:
+    out = Path(args.out)
+    if out.exists() and args.clean:
+        shutil.rmtree(out)
+    out.mkdir(parents=True, exist_ok=True)
+
+    cases = []
+    for i in range(args.count):
+        seed = args.seed * 10_000 + i
+        kind = KYC_TYPES[i % len(KYC_TYPES)]
+        renderer = "image" if (i // len(KYC_TYPES)) % 2 == 0 else "digital"
+        doc = KycGenerator(seed).generate(kind)
+        pdf = render_kyc(doc, renderer)
+        case_id = f"case_{i + 1:04d}"
+        meta = {"seed": seed, "document_type": kind, "renderer": renderer, "masked": doc.masked}
+        write_case(out / case_id, document=pdf, expected=kyc_expected(doc), meta=meta)
+        cases.append({"id": case_id, "tags": [kind, renderer]})
+        print(f"{case_id}  {kind:16s} {renderer:8s} bytes={len(pdf)}")
+
+    write_manifest(out, schema="pack:lending.kyc", cases=cases)
+    print(f"wrote {len(cases)} cases to {out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m tools.synth", description="Synthetic lending documents"
@@ -172,6 +199,13 @@ def main(argv: list[str] | None = None) -> int:
     salary.add_argument("--out", default="evals/salary_slip")
     salary.add_argument("--clean", action="store_true", help="delete the output folder first")
     salary.set_defaults(func=_salary)
+
+    kyc = sub.add_parser("kyc", help="KYC specimens (PAN, Aadhaar, passport, DL, voter ID)")
+    kyc.add_argument("--count", type=int, default=20)
+    kyc.add_argument("--seed", type=int, default=13)
+    kyc.add_argument("--out", default="evals/kyc")
+    kyc.add_argument("--clean", action="store_true", help="delete the output folder first")
+    kyc.set_defaults(func=_kyc)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
