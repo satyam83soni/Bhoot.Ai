@@ -8,7 +8,6 @@ from typing import Literal, Protocol, runtime_checkable
 
 from bhoot.domain.document import BBox, CharBox, Word
 
-
 IDENTITY_3X3 = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)  # row-major
 
 
