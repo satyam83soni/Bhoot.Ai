@@ -36,9 +36,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python: ["3.11", "3.12", "3.13"]
+    env:
+      UV_PYTHON: ${{ matrix.python }}  # every uv command uses the matrix version, not .python-version
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
       - run: uv python install ${{ matrix.python }}
-      - run: uv sync --group dev --group tools --python ${{ matrix.python }}
-      - run: uv run pytest -m "not live" --cov --cov-report=term-missing
+      - run: uv sync --group dev --group tools
+      - name: Show interpreter under test
+        run: uv run --no-sync python --version
+      - run: uv run --no-sync pytest -m "not live" --cov --cov-report=term-missing
