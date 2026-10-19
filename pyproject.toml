@@ -42,7 +42,7 @@ dependencies = [
 openai = ["openai>=1.40"]
 anthropic = ["anthropic>=0.40"]
 gemini = ["google-genai>=1.30"]
-ocr = ["rapidocr>=2.0", "onnxruntime>=1.18", "opencv-python-headless>=4.10"]
+ocr = ["rapidocr>=3.9", "onnxruntime>=1.18", "opencv-python-headless>=4.10"]
 otel = ["opentelemetry-api>=1.25", "opentelemetry-sdk>=1.25"]
 eval = ["pandas>=2.2"]
 all = ["bhoot[openai,anthropic,gemini,ocr,otel,eval]"]
