@@ -25,6 +25,7 @@ from bhoot_graph.errors import InvalidGraphError
 from bhoot_graph.state import Channel, channels_for
 
 if TYPE_CHECKING:
+    from bhoot_graph.checkpoint.base import BaseCheckpointSaver
     from bhoot_graph.runner import CompiledGraph
 
 NodeAction = Callable[..., Any]
@@ -176,8 +177,18 @@ class StateGraph:
         return self.add_edge(key, END)
 
     # ------------------------------------------------------------------ compile
-    def compile(self, *, name: str | None = None) -> CompiledGraph:
-        """Check the wiring and return a runnable graph (a snapshot of this builder)."""
+    def compile(
+        self,
+        checkpointer: BaseCheckpointSaver | None = None,
+        *,
+        name: str | None = None,
+        version: str | None = None,
+    ) -> CompiledGraph:
+        """Check the wiring and return a runnable graph (a snapshot of this builder).
+
+        With a ``checkpointer`` every superstep is saved under the run's ``thread_id``.
+        ``version`` pins saved runs: a thread saved by another version is not resumed.
+        """
         self.validate()
         from bhoot_graph.runner import CompiledGraph
 
@@ -188,6 +199,8 @@ class StateGraph:
             edges=tuple(self.edges),
             waiting_edges=tuple(self.waiting_edges),
             branches={k: tuple(v) for k, v in self.branches.items()},
+            checkpointer=checkpointer,
+            version=version,
         )
 
     def validate(self) -> None:
