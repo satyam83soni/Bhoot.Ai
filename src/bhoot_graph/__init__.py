@@ -21,9 +21,10 @@ from bhoot_graph.errors import (
     InvalidUpdateError,
 )
 from bhoot_graph.graph import StateGraph
+from bhoot_graph.interrupt import GraphInterrupt, interrupt
 from bhoot_graph.runner import CompiledGraph, StateSnapshot
 from bhoot_graph.stream import StreamWriter, get_stream_writer
-from bhoot_graph.types import Command, Send
+from bhoot_graph.types import Command, Interrupt, Send
 
 __version__ = "0.1.0"
 
@@ -35,8 +36,10 @@ __all__ = [
     "Command",
     "CompiledGraph",
     "GraphError",
+    "GraphInterrupt",
     "GraphRecursionError",
     "GraphTimeoutError",
+    "Interrupt",
     "InvalidGraphError",
     "InvalidUpdateError",
     "JsonSerializer",
@@ -49,4 +52,5 @@ __all__ = [
     "StreamWriter",
     "ThreadBusyError",
     "get_stream_writer",
+    "interrupt",
 ]

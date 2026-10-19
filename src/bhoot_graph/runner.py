@@ -43,9 +43,10 @@ from bhoot_graph.errors import (
     InvalidUpdateError,
 )
 from bhoot_graph.graph import Branch, NodeSpec
+from bhoot_graph.interrupt import GraphInterrupt, start_task
 from bhoot_graph.state import Channel, apply_writes
 from bhoot_graph.stream import RunStream, parse_modes, set_writers
-from bhoot_graph.types import Command, Send
+from bhoot_graph.types import Command, Interrupt, Send
 
 DEFAULT_RECURSION_LIMIT = 25
 DEFAULT_LOCK_TTL_S = 900.0  # refreshed every superstep
@@ -59,6 +60,7 @@ class StepResult:
     tasks: tuple[Task, ...]
     updates: tuple[tuple[Task, Mapping[str, Any]], ...]
     state: Mapping[str, Any]
+    interrupts: tuple[Interrupt, ...] = ()  # set on the last result of a paused run
 
 
 @dataclass(frozen=True, slots=True)
@@ -70,11 +72,19 @@ class StateSnapshot:
     step: int
     checkpoint_id: str
     created_at: str
+    interrupts: tuple[Interrupt, ...] = ()  # questions the paused run is waiting on
 
 
 @dataclass(frozen=True, slots=True)
 class _Failed:
     error: BaseException
+
+
+@dataclass(frozen=True, slots=True)
+class _Paused:
+    """Not an error: some tasks of the step called interrupt()."""
+
+    by_task: dict[str, tuple[Interrupt, ...]]
 
 
 _END = object()
@@ -130,21 +140,25 @@ class CompiledGraph:
 
     # ------------------------------------------------------------------ public API
     async def ainvoke(
-        self, input: Mapping[str, Any] | None, config: RunConfig | None = None
+        self, input: Mapping[str, Any] | Command | None, config: RunConfig | None = None
     ) -> dict[str, Any]:
         """Run to the end and return the final state.
 
-        With a checkpointer, ``input=None`` resumes the thread from its last checkpoint, and
-        an input starts a new run on top of the thread's saved state.
+        With a checkpointer, ``input=None`` resumes the thread from its last checkpoint,
+        ``Command(resume=answer)`` answers a pending ``interrupt()`` and resumes, and an input
+        starts a new run on top of the thread's saved state. A paused run returns its state
+        with the pending questions under ``"__interrupt__"``.
         """
         state: dict[str, Any] = {}
         async for result in self._steps(input, config):
             state = dict(result.state)
+            if result.interrupts:
+                state["__interrupt__"] = result.interrupts
         return state
 
     async def astream(
         self,
-        input: Mapping[str, Any] | None,
+        input: Mapping[str, Any] | Command | None,
         config: RunConfig | None = None,
         *,
         stream_mode: str | Sequence[str] = "values",
@@ -173,10 +187,19 @@ class CompiledGraph:
             await asyncio.gather(producer, return_exceptions=True)
 
     async def _produce(
-        self, input: Mapping[str, Any] | None, config: RunConfig | None, stream: RunStream
+        self,
+        input: Mapping[str, Any] | Command | None,
+        config: RunConfig | None,
+        stream: RunStream,
     ) -> None:
         try:
             async for result in self._steps(input, config, stream):
+                if result.interrupts:
+                    await stream.push("updates", {"__interrupt__": result.interrupts})
+                    await stream.push(
+                        "values", {**result.state, "__interrupt__": result.interrupts}
+                    )
+                    continue
                 for task, update in result.updates:
                     await stream.push("updates", {task.node: dict(update)})
                 await stream.push("values", dict(result.state))
@@ -188,7 +211,7 @@ class CompiledGraph:
         await stream.close(_END)
 
     def invoke(
-        self, input: Mapping[str, Any] | None, config: RunConfig | None = None
+        self, input: Mapping[str, Any] | Command | None, config: RunConfig | None = None
     ) -> dict[str, Any]:
         """Blocking ``ainvoke`` for scripts; inside a running event loop, await ainvoke."""
         _require_no_loop("invoke", "ainvoke")
@@ -198,7 +221,11 @@ class CompiledGraph:
         """The latest saved point of the thread in ``config``, or None."""
         saver, thread = self._saver_and_thread(config)
         latest = await saver.aget(thread)
-        return _snapshot(latest) if latest else None
+        if latest is None:
+            return None
+        writes = await saver.aget_writes(thread, latest.id)
+        paused = tuple(i for w in writes.values() if w.kind == "paused" for i in w.interrupts)
+        return _snapshot(latest, paused)
 
     def get_state(self, config: RunConfig) -> StateSnapshot | None:
         _require_no_loop("get_state", "aget_state")
@@ -230,7 +257,7 @@ class CompiledGraph:
     # ------------------------------------------------------------------ the loop
     async def _steps(
         self,
-        input: Mapping[str, Any] | None,
+        input: Mapping[str, Any] | Command | None,
         config: RunConfig | None,
         stream: RunStream | None = None,
     ) -> AsyncIterator[StepResult]:
@@ -253,7 +280,7 @@ class CompiledGraph:
 
     async def _loop(
         self,
-        input: Mapping[str, Any] | None,
+        input: Mapping[str, Any] | Command | None,
         config: RunConfig,
         saving: _Saving | None,
         stream: RunStream | None,
@@ -265,14 +292,24 @@ class CompiledGraph:
         if latest is not None:
             self._check_compatible(latest)
         done: dict[str, _Outcome] = {}
-        if saving and latest is not None and input is None:  # resume
+        resumes: dict[str, tuple[Any, ...]] = {}
+        if isinstance(input, Command):
+            if input.update is not None or input.goto or not input.has_resume:
+                raise GraphError("as run input, a Command can only carry resume=...")
+            if saving is None or latest is None:
+                raise GraphError("Command(resume=...) needs a checkpointer and a paused thread")
+        if saving and latest is not None and (input is None or isinstance(input, Command)):
             state, step = dict(latest.values), latest.step
             waiting = {index: set(sources) for index, sources in latest.waiting.items()}
             tasks = list(latest.next)
             saving.checkpoint_id = latest.id
             writes = await saving.saver.aget_writes(saving.thread, latest.id)
-            done = {task_id: _Outcome(w.update, w.goto) for task_id, w in writes.items()}
+            if isinstance(input, Command):
+                writes = await self._answer(saving, writes, input.resume)
+            done = {t: _Outcome(w.update, w.goto) for t, w in writes.items() if w.kind == "done"}
+            resumes = {t: w.resumes for t, w in writes.items() if w.kind == "paused"}
         else:
+            assert not isinstance(input, Command)  # a Command input either resumed or raised
             base = dict(latest.values) if latest else {}
             step = latest.step + 1 if latest else 0
             state = apply_writes(base, self.channels, [("input", dict(input or {}))])
@@ -294,8 +331,33 @@ class CompiledGraph:
                 )
             step += 1
             outcomes, failure = await self._run_step(
-                step, tasks, state, config, semaphore, done, stream
+                step, tasks, state, config, semaphore, done, resumes, stream
             )
+            if isinstance(failure, _Paused):
+                if saving is None:
+                    raise GraphError(
+                        "interrupt() needs a checkpointer: compile(checkpointer=...) and pass "
+                        "a thread_id, so the run can be resumed later"
+                    )
+                for task in tasks:
+                    if task.id in outcomes and task.id not in done:
+                        o = outcomes[task.id]
+                        write = PendingWrite(task.id, o.update, o.goto)
+                        await saving.saver.aput_write(saving.thread, saving.checkpoint_id, write)
+                    elif task.id in failure.by_task:
+                        write = PendingWrite(
+                            task.id,
+                            kind="paused",
+                            interrupts=failure.by_task[task.id],
+                            resumes=resumes.get(task.id, ()),
+                        )
+                        await saving.saver.aput_write(saving.thread, saving.checkpoint_id, write)
+                pending = tuple(i for t in tasks for i in failure.by_task.get(t.id, ()))
+                if stream is not None:
+                    event = {"type": "interrupt", "step": step, "interrupts": pending}
+                    await stream.push("debug", event)
+                yield StepResult(step - 1, (), (), state, pending)
+                return
             if failure is not None:
                 if saving is not None:
                     for task in tasks:
@@ -312,7 +374,7 @@ class CompiledGraph:
             )
             finished = [(t.node, o.goto) for t, o in ordered]
             tasks = await self._schedule(step, finished, state, config, waiting)
-            done = {}
+            done, resumes = {}, {}
             await self._save(saving, step, state, tasks, waiting, stream)
             yield StepResult(
                 step, tuple(t for t, _ in ordered), tuple((t, o.update) for t, o in ordered), state
@@ -354,6 +416,41 @@ class CompiledGraph:
             }
             await stream.push("debug", event)
 
+    async def _answer(
+        self, saving: _Saving, writes: dict[str, PendingWrite], resume: Any
+    ) -> dict[str, PendingWrite]:
+        """Attach ``resume`` to the paused task(s) it answers and save that before running,
+        so an answer is never lost to a crash."""
+        pending = {
+            i.id: task_id
+            for task_id, w in writes.items()
+            if w.kind == "paused"
+            for i in w.interrupts
+        }
+        if not pending:
+            raise GraphError(f"thread {saving.thread!r} has no pending interrupt to answer")
+        if isinstance(resume, Mapping) and any(key in pending for key in resume):
+            unknown = sorted(str(key) for key in resume if key not in pending)
+            if unknown:
+                raise GraphError(
+                    f"no pending interrupt with id {unknown}; pending: {sorted(pending)}"
+                )
+            answers = dict(resume)
+        elif len(pending) == 1:
+            answers = {next(iter(pending)): resume}
+        else:
+            raise GraphError(
+                f"{len(pending)} interrupts are pending; resume with "
+                f"Command(resume={{interrupt_id: answer}}) using ids {sorted(pending)}"
+            )
+        updated = dict(writes)
+        for interrupt_id, answer in answers.items():
+            old = updated[pending[interrupt_id]]
+            new = PendingWrite(old.task_id, kind="paused", resumes=(*old.resumes, answer))
+            await saving.saver.aput_write(saving.thread, saving.checkpoint_id, new)
+            updated[old.task_id] = new
+        return updated
+
     def _check_compatible(self, saved: Checkpoint) -> None:
         if (saved.graph, saved.version) != (self.name, self.version):
             raise CheckpointMismatchError(
@@ -385,13 +482,16 @@ class CompiledGraph:
         config: RunConfig,
         semaphore: contextlib.AbstractAsyncContextManager[Any],
         done: Mapping[str, _Outcome],
+        resumes: Mapping[str, tuple[Any, ...]],
         stream: RunStream | None,
-    ) -> tuple[dict[str, _Outcome], BaseException | None]:
+    ) -> tuple[dict[str, _Outcome], BaseException | _Paused | None]:
         """Run the step's tasks (reusing ``done`` ones). Returns the outcomes of every task
         that finished, and the error to raise if the step as a whole failed."""
         outcomes = {task_id: done[task_id] for task_id in (t.id for t in tasks) if task_id in done}
         running = {
-            task.id: asyncio.create_task(self._run_task(task, state, config, semaphore, stream))
+            task.id: asyncio.create_task(
+                self._run_task(task, state, config, semaphore, resumes.get(task.id, ()), stream)
+            )
             for task in tasks
             if task.id not in done
         }
@@ -405,12 +505,16 @@ class CompiledGraph:
         if pending:
             await _cancel_all(pending)
         failed: list[Task] = []
+        paused: dict[str, tuple[Interrupt, ...]] = {}
         for task in tasks:
             future = running.get(task.id)
             if future is None or future in pending:
                 continue
-            if future.exception() is None:
+            error = future.exception()
+            if error is None:
                 outcomes[task.id] = future.result()
+            elif isinstance(error, GraphInterrupt):
+                paused[task.id] = (error.interrupt,)
             else:
                 failed.append(task)
         if pending:
@@ -426,6 +530,8 @@ class CompiledGraph:
             if len(failed) > 1:
                 error.add_note(f"{len(failed) - 1} sibling task(s) failed as well")
             return outcomes, error
+        if paused:
+            return outcomes, _Paused(paused)
         return outcomes, None
 
     async def _run_task(
@@ -434,8 +540,10 @@ class CompiledGraph:
         state: Mapping[str, Any],
         config: RunConfig,
         semaphore: contextlib.AbstractAsyncContextManager[Any],
+        resumes: tuple[Any, ...],
         stream: RunStream | None,
     ) -> _Outcome:
+        start_task(task.id, resumes)
         if stream is None:
             return await self._call_node(task, state, config, semaphore)
         set_writers(stream.writers_for(task.node, task.id))
@@ -445,6 +553,9 @@ class CompiledGraph:
         error: str | None = None
         try:
             return await self._call_node(task, state, config, semaphore)
+        except GraphInterrupt:
+            error = "interrupted"
+            raise
         except BaseException as exc:
             error = f"{type(exc).__name__}: {exc}"
             raise
@@ -584,13 +695,14 @@ def _child_config(config: RunConfig, task_id: str) -> dict[str, Any]:
     return child
 
 
-def _snapshot(checkpoint: Checkpoint) -> StateSnapshot:
+def _snapshot(checkpoint: Checkpoint, interrupts: tuple[Interrupt, ...] = ()) -> StateSnapshot:
     return StateSnapshot(
         values=dict(checkpoint.values),
         next=tuple(t.node for t in checkpoint.next),
         step=checkpoint.step,
         checkpoint_id=checkpoint.id,
         created_at=checkpoint.created_at,
+        interrupts=interrupts,
     )
 
 
