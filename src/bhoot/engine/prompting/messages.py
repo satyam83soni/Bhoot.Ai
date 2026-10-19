@@ -10,9 +10,9 @@ from __future__ import annotations
 import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Protocol
 
-from bhoot.domain.document import Document
+from bhoot.domain.document import Page
 from bhoot.domain.example import Example
 from bhoot.domain.locales import Locale
 from bhoot.domain.prompt import PromptTemplate
@@ -23,6 +23,12 @@ from bhoot.engine.prompting.system_prompts import GROUNDING_RULES, INJECTION_GUA
 from bhoot.engine.prompting.templates import render_prompt
 from bhoot.engine.schema_compiler import SchemaDialect, SchemaTree, Selection
 from bhoot.ports.llm import ContentPart, LLMMessage
+
+
+class PageLookup(Protocol):
+    """Anything that gives a page by index: a ``Document``, or the few pages a work item needs."""
+
+    def page(self, index: int) -> Page: ...
 
 
 def neutralise(text: str) -> str:
@@ -70,7 +76,7 @@ class MessageBuilder:
         self,
         inputs: PromptInputs,
         item: WorkItem,
-        doc: Document,
+        doc: PageLookup,
         *,
         envelope: Mapping[str, Any],
         dialect: SchemaDialect,
@@ -111,7 +117,7 @@ class MessageBuilder:
 
 
 def _document_parts(
-    prompt: str, item: WorkItem, doc: Document, crop_refs: tuple[str, ...]
+    prompt: str, item: WorkItem, doc: PageLookup, crop_refs: tuple[str, ...]
 ) -> tuple[ContentPart, ...]:
     parts: list[ContentPart] = []
     text = [prompt, "", "<document>"]
