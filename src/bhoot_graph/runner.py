@@ -6,22 +6,37 @@ Each superstep:
 2. merges their updates through the channels, in task order (so the result never depends on
    which branch finished first);
 3. follows edges, routers and ``Command.goto`` from the tasks that ran to schedule the next
-   step. A node triggered by several edges runs once; every ``Send`` is its own task.
+   step. A node triggered by several edges runs once; every ``Send`` is its own task;
+4. with a checkpointer, saves the state and the scheduled tasks.
 
 The run ends when nothing is scheduled. A failed node lets its siblings finish, then its
-error is raised with a note naming the node and step. Cancelling the run cancels every task.
+error is raised with a note naming the node and step; with a checkpointer the siblings'
+results are kept, so a resumed run (``ainvoke(None, config)``) only redoes what failed.
+Cancelling the run cancels every task.
 """
 
 from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
+import json
+import uuid
 from collections.abc import AsyncIterator, Hashable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from bhoot_graph.checkpoint.base import (
+    BaseCheckpointSaver,
+    Checkpoint,
+    CheckpointMismatchError,
+    PendingWrite,
+    Task,
+    ThreadBusyError,
+)
 from bhoot_graph.constants import END, START
 from bhoot_graph.errors import (
+    GraphError,
     GraphRecursionError,
     GraphTimeoutError,
     InvalidUpdateError,
@@ -31,15 +46,8 @@ from bhoot_graph.state import Channel, apply_writes
 from bhoot_graph.types import Command, Send
 
 DEFAULT_RECURSION_LIMIT = 25
+DEFAULT_LOCK_TTL_S = 900.0  # refreshed every superstep
 RunConfig = Mapping[str, Any]
-
-
-@dataclass(frozen=True, slots=True)
-class Task:
-    id: str  # "<step>:<index>:<node>", zero-padded so ids sort in scheduling order
-    node: str
-    arg: Any = None
-    sent: bool = False  # True: ``arg`` is a Send payload, not the state
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,10 +58,30 @@ class StepResult:
     state: Mapping[str, Any]
 
 
+@dataclass(frozen=True, slots=True)
+class StateSnapshot:
+    """A saved point of a thread, as returned by ``aget_state``."""
+
+    values: Mapping[str, Any]
+    next: tuple[str, ...]  # nodes that run when the thread is resumed; () when finished
+    step: int
+    checkpoint_id: str
+    created_at: str
+
+
 @dataclass(slots=True)
 class _Outcome:
     update: Mapping[str, Any]
     goto: tuple[str | Send, ...] = ()
+
+
+@dataclass(slots=True)
+class _Saving:
+    saver: BaseCheckpointSaver
+    thread: str
+    owner: str
+    ttl_s: float
+    checkpoint_id: str = ""
 
 
 @dataclass
@@ -64,8 +92,11 @@ class CompiledGraph:
     edges: tuple[tuple[str, str], ...]
     waiting_edges: tuple[tuple[tuple[str, ...], str], ...]
     branches: Mapping[str, tuple[Branch, ...]]
+    checkpointer: BaseCheckpointSaver | None = None
+    version: str | None = None
     step_timeout: float | None = None
     _edges_from: dict[str, tuple[str, ...]] = field(init=False, repr=False)
+    fingerprint: str = field(init=False)
 
     def __post_init__(self) -> None:
         edges_from: dict[str, list[str]] = {}
@@ -73,12 +104,28 @@ class CompiledGraph:
             if b not in edges_from.setdefault(a, []):
                 edges_from[a].append(b)
         self._edges_from = {k: tuple(v) for k, v in edges_from.items()}
+        shape = {
+            "nodes": sorted(self.nodes),
+            "edges": sorted(self.edges),
+            "waiting": sorted([sorted(s), t] for s, t in self.waiting_edges),
+            "branches": sorted(
+                [src, sorted(set((b.path_map or {}).values()))]
+                for src, bs in self.branches.items()
+                for b in bs
+            ),
+        }
+        blob = json.dumps(shape, sort_keys=True).encode("utf-8")
+        self.fingerprint = hashlib.sha256(blob).hexdigest()[:16]
 
     # ------------------------------------------------------------------ public API
     async def ainvoke(
         self, input: Mapping[str, Any] | None, config: RunConfig | None = None
     ) -> dict[str, Any]:
-        """Run to the end and return the final state."""
+        """Run to the end and return the final state.
+
+        With a checkpointer, ``input=None`` resumes the thread from its last checkpoint, and
+        an input starts a new run on top of the thread's saved state.
+        """
         state: dict[str, Any] = {}
         async for result in self._steps(input, config):
             state = dict(result.state)
@@ -88,11 +135,23 @@ class CompiledGraph:
         self, input: Mapping[str, Any] | None, config: RunConfig | None = None
     ) -> dict[str, Any]:
         """Blocking ``ainvoke`` for scripts; inside a running event loop, await ainvoke."""
-        try:
-            asyncio.get_running_loop()
-        except RuntimeError:
-            return asyncio.run(self.ainvoke(input, config))
-        raise RuntimeError("invoke() was called inside an event loop; use await ainvoke()")
+        _require_no_loop("invoke", "ainvoke")
+        return asyncio.run(self.ainvoke(input, config))
+
+    async def aget_state(self, config: RunConfig) -> StateSnapshot | None:
+        """The latest saved point of the thread in ``config``, or None."""
+        saver, thread = self._saver_and_thread(config)
+        latest = await saver.aget(thread)
+        return _snapshot(latest) if latest else None
+
+    def get_state(self, config: RunConfig) -> StateSnapshot | None:
+        _require_no_loop("get_state", "aget_state")
+        return asyncio.run(self.aget_state(config))
+
+    async def aget_state_history(self, config: RunConfig) -> list[StateSnapshot]:
+        """Every saved point of the thread, newest first."""
+        saver, thread = self._saver_and_thread(config)
+        return [_snapshot(c) for c in reversed(await saver.alist(thread))]
 
     def draw_mermaid(self) -> str:
         """The graph as a Mermaid flowchart (dotted arrows are conditional)."""
@@ -117,30 +176,132 @@ class CompiledGraph:
         self, input: Mapping[str, Any] | None, config: RunConfig | None
     ) -> AsyncIterator[StepResult]:
         config = dict(config or {})
+        if self.checkpointer is None:
+            async for result in self._loop(input, config, None):
+                yield result
+            return
+        saver, thread = self._saver_and_thread(config)
+        saving = _Saving(
+            saver, thread, uuid.uuid4().hex, float(config.get("lock_ttl", DEFAULT_LOCK_TTL_S))
+        )
+        if not await saver.aacquire(thread, saving.owner, saving.ttl_s):
+            raise ThreadBusyError(f"thread {thread!r} is being run by another process")
+        try:
+            async for result in self._loop(input, config, saving):
+                yield result
+        finally:
+            await saver.arelease(thread, saving.owner)
+
+    async def _loop(
+        self, input: Mapping[str, Any] | None, config: RunConfig, saving: _Saving | None
+    ) -> AsyncIterator[StepResult]:
         limit = int(config.get("recursion_limit", DEFAULT_RECURSION_LIMIT))
         cap = config.get("max_concurrency")
         semaphore = asyncio.Semaphore(int(cap)) if cap else contextlib.nullcontext()
-        state = apply_writes({}, self.channels, [("input", dict(input or {}))])
-        yield StepResult(0, (), (), state)  # the input, so a run where nothing fires returns it
-        waiting: dict[int, set[str]] = {}
-        tasks = await self._schedule(0, [(START, ())], state, config, waiting)
-        step = 0
+        latest = await saving.saver.aget(saving.thread) if saving else None
+        if latest is not None:
+            self._check_compatible(latest)
+        done: dict[str, _Outcome] = {}
+        if saving and latest is not None and input is None:  # resume
+            state, step = dict(latest.values), latest.step
+            waiting = {index: set(sources) for index, sources in latest.waiting.items()}
+            tasks = list(latest.next)
+            saving.checkpoint_id = latest.id
+            writes = await saving.saver.aget_writes(saving.thread, latest.id)
+            done = {task_id: _Outcome(w.update, w.goto) for task_id, w in writes.items()}
+        else:
+            base = dict(latest.values) if latest else {}
+            step = latest.step + 1 if latest else 0
+            state = apply_writes(base, self.channels, [("input", dict(input or {}))])
+            waiting = {}
+            tasks = await self._schedule(step, [(START, ())], state, config, waiting)
+            await self._save(saving, step, state, tasks, waiting)
+        yield StepResult(
+            step, (), (), state
+        )  # the starting state: a run where nothing fires returns it
+
+        executed = 0
         while tasks:
-            step += 1
-            if step > limit:
+            executed += 1
+            if executed > limit:
                 raise GraphRecursionError(
                     f"{self.name}: hit recursion_limit={limit} supersteps without reaching END "
                     f"(next: {sorted({t.node for t in tasks})}); raise it in the run config "
                     "if the loop is expected to run longer"
                 )
-            outcomes = await self._run_step(step, tasks, state, config, semaphore)
+            step += 1
+            outcomes, failure = await self._run_step(step, tasks, state, config, semaphore, done)
+            if failure is not None:
+                if saving is not None:
+                    for task in tasks:
+                        if task.id in outcomes and task.id not in done:
+                            o = outcomes[task.id]
+                            write = PendingWrite(task.id, o.update, o.goto)
+                            await saving.saver.aput_write(
+                                saving.thread, saving.checkpoint_id, write
+                            )
+                raise failure
             ordered = [(task, outcomes[task.id]) for task in tasks]
             state = apply_writes(
                 state, self.channels, [(f"node {t.node!r}", o.update) for t, o in ordered]
             )
-            yield StepResult(step, tuple(tasks), tuple((t, o.update) for t, o in ordered), state)
             finished = [(t.node, o.goto) for t, o in ordered]
             tasks = await self._schedule(step, finished, state, config, waiting)
+            done = {}
+            await self._save(saving, step, state, tasks, waiting)
+            yield StepResult(
+                step, tuple(t for t, _ in ordered), tuple((t, o.update) for t, o in ordered), state
+            )
+
+    async def _save(
+        self,
+        saving: _Saving | None,
+        step: int,
+        state: Mapping[str, Any],
+        tasks: Sequence[Task],
+        waiting: Mapping[int, set[str]],
+    ) -> None:
+        if saving is None:
+            return
+        if not await saving.saver.aacquire(saving.thread, saving.owner, saving.ttl_s):
+            raise ThreadBusyError(
+                f"lost the lock on thread {saving.thread!r} (held longer than lock_ttl?)"
+            )
+        checkpoint = Checkpoint(
+            thread_id=saving.thread,
+            step=step,
+            values=dict(state),
+            next=tuple(tasks),
+            waiting={index: tuple(sorted(s)) for index, s in waiting.items() if s},
+            graph=self.name,
+            version=self.version,
+            fingerprint=self.fingerprint,
+        )
+        await saving.saver.aput(checkpoint)
+        saving.checkpoint_id = checkpoint.id
+
+    def _check_compatible(self, saved: Checkpoint) -> None:
+        if (saved.graph, saved.version) != (self.name, self.version):
+            raise CheckpointMismatchError(
+                f"thread {saved.thread_id!r} was saved by graph {saved.graph!r} version "
+                f"{saved.version!r}; this is {self.name!r} version {self.version!r}"
+            )
+        if saved.fingerprint != self.fingerprint and not saved.done:
+            raise CheckpointMismatchError(
+                f"thread {saved.thread_id!r} stopped mid-run in a graph whose nodes or edges "
+                "have since changed; finish it with the old graph, or bump the graph version "
+                "and start a new thread"
+            )
+
+    def _saver_and_thread(self, config: RunConfig | None) -> tuple[BaseCheckpointSaver, str]:
+        if self.checkpointer is None:
+            raise GraphError(f"{self.name} was compiled without a checkpointer")
+        thread = (config or {}).get("configurable", {}).get("thread_id")
+        if not thread:
+            raise GraphError(
+                "a graph with a checkpointer needs config={'configurable': {'thread_id': ...}}"
+            )
+        return self.checkpointer, str(thread)
 
     async def _run_step(
         self,
@@ -149,11 +310,18 @@ class CompiledGraph:
         state: Mapping[str, Any],
         config: RunConfig,
         semaphore: contextlib.AbstractAsyncContextManager[Any],
-    ) -> dict[str, _Outcome]:
+        done: Mapping[str, _Outcome],
+    ) -> tuple[dict[str, _Outcome], BaseException | None]:
+        """Run the step's tasks (reusing ``done`` ones). Returns the outcomes of every task
+        that finished, and the error to raise if the step as a whole failed."""
+        outcomes = {task_id: done[task_id] for task_id in (t.id for t in tasks) if task_id in done}
         running = {
             task.id: asyncio.create_task(self._run_task(task, state, config, semaphore))
             for task in tasks
+            if task.id not in done
         }
+        if not running:
+            return outcomes, None
         try:
             _, pending = await asyncio.wait(running.values(), timeout=self.step_timeout)
         except BaseException:  # cancelled from outside: take every branch down with us
@@ -161,20 +329,29 @@ class CompiledGraph:
             raise
         if pending:
             await _cancel_all(pending)
-            slow = sorted({t.node for t in tasks if running[t.id] in pending})
-            raise GraphTimeoutError(
+        failed: list[Task] = []
+        for task in tasks:
+            future = running.get(task.id)
+            if future is None or future in pending:
+                continue
+            if future.exception() is None:
+                outcomes[task.id] = future.result()
+            else:
+                failed.append(task)
+        if pending:
+            slow = sorted({t.node for t in tasks if running.get(t.id) in pending})
+            return outcomes, GraphTimeoutError(
                 f"{self.name}: step {step} exceeded step_timeout={self.step_timeout}s; "
                 f"still running: {slow}"
             )
-        failed = [t for t in tasks if running[t.id].exception() is not None]
         if failed:
             error = running[failed[0].id].exception()
             assert error is not None
             error.add_note(f"in node {failed[0].node!r} (task {failed[0].id}) of {self.name}")
             if len(failed) > 1:
                 error.add_note(f"{len(failed) - 1} sibling task(s) failed as well")
-            raise error
-        return {task_id: future.result() for task_id, future in running.items()}
+            return outcomes, error
+        return outcomes, None
 
     async def _run_task(
         self,
@@ -188,7 +365,8 @@ class CompiledGraph:
         async with semaphore:
             if isinstance(spec.action, CompiledGraph):
                 sub_input = {k: v for k, v in arg.items() if k in spec.action.channels}
-                result: Any = await spec.action.ainvoke(sub_input, _child_config(config))
+                child = _child_config(config, task.id)
+                result: Any = await spec.action.ainvoke(sub_input, child)
                 result = {k: v for k, v in result.items() if k in self.channels}
             elif spec.is_async:
                 result = await (
@@ -289,10 +467,32 @@ def _task_id(step: int, index: int, node: str) -> str:
     return f"{step:06d}:{index:06d}:{node}"
 
 
-def _child_config(config: RunConfig) -> dict[str, Any]:
+def _child_config(config: RunConfig, task_id: str) -> dict[str, Any]:
     child = dict(config)
     child.pop("recursion_limit", None)  # a subgraph gets its own budget of supersteps
+    configurable = dict(child.get("configurable", {}))
+    if "thread_id" in configurable:  # a subgraph with its own saver gets its own thread
+        configurable["thread_id"] = f"{configurable['thread_id']}/{task_id}"
+        child["configurable"] = configurable
     return child
+
+
+def _snapshot(checkpoint: Checkpoint) -> StateSnapshot:
+    return StateSnapshot(
+        values=dict(checkpoint.values),
+        next=tuple(t.node for t in checkpoint.next),
+        step=checkpoint.step,
+        checkpoint_id=checkpoint.id,
+        created_at=checkpoint.created_at,
+    )
+
+
+def _require_no_loop(name: str, async_name: str) -> None:
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return
+    raise RuntimeError(f"{name}() was called inside an event loop; use await {async_name}()")
 
 
 async def _cancel_all(futures: Any) -> None:
