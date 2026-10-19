@@ -2,7 +2,9 @@
 
     python -m tools.baselines run --model openai/<model> --dataset evals/bank_statement --limit 5
 
-Needs the provider's API key in the environment (read by LiteLLM). Writes a JSON report.
+Needs the provider's API key in the environment (OPENAI_API_KEY, ANTHROPIC_API_KEY or
+GEMINI_API_KEY). Pass --price-in/--price-out (USD per million tokens) to get costs.
+Writes a JSON report.
 """
 
 from __future__ import annotations
@@ -17,7 +19,9 @@ from tools.baselines.raw_llm import RawLLMBaseline
 
 
 def _run(args: argparse.Namespace) -> int:
-    runner = RawLLMBaseline(args.model)
+    runner = RawLLMBaseline(
+        args.model, api_base=args.api_base, price_per_mtok=(args.price_in, args.price_out)
+    )
     reports = []
     for dataset in args.dataset:
         path = Path(dataset)
@@ -46,7 +50,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run", help="run the raw LLM baseline")
-    run.add_argument("--model", required=True, help="LiteLLM model id")
+    run.add_argument("--model", required=True, help="provider/model, e.g. openai/<model>")
+    run.add_argument("--api-base", default=None, help="any OpenAI-compatible server")
+    run.add_argument("--price-in", type=float, default=0.0, help="USD per 1M input tokens")
+    run.add_argument("--price-out", type=float, default=0.0, help="USD per 1M output tokens")
     run.add_argument("--dataset", action="append", required=True, help="repeatable")
     run.add_argument("--limit", type=int, default=None, help="first N cases per dataset")
     run.add_argument("--out", default="benchmarks/baseline_results.json")
