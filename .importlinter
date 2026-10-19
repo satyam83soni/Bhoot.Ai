@@ -2,7 +2,7 @@
 root_package = bhoot
 include_external_packages = True
 
-# Layer rules: System_Design_v0.1.md §3.3
+# Layer rules: System_Design_v0.1.md Â§3.3
 
 [importlinter:contract:domain-is-pure]
 name = Domain imports no other bhoot layer or infrastructure library
@@ -17,8 +17,9 @@ forbidden_modules =
     bhoot.packs
     bhoot.api
     bhoot.cli
-    langgraph
-    litellm
+    openai
+    anthropic
+    google
     pypdfium2
     pdfplumber
     rapidocr
@@ -60,7 +61,9 @@ forbidden_modules =
     bhoot.packs
     bhoot.api
     bhoot.cli
-    litellm
+    openai
+    anthropic
+    google
     pypdfium2
     pdfplumber
     rapidocr
