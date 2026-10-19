@@ -27,6 +27,7 @@ from bhoot.domain.work import WorkItem, WorkKind, WorkOutcome, WorkStatus
 from bhoot.engine.cost import BudgetGuard, CallShape, Price, PriceBook, estimate_usage, estimate_usd
 from bhoot.engine.events import EventBus, FieldDecided, NodeStarted
 from bhoot.engine.graph.serde import engine_serializer
+from bhoot.engine.graph.state import Reset
 from bhoot.engine.normalize.conventions import DocConventions
 from bhoot.engine.registry import StrategyRegistry
 
@@ -196,6 +197,7 @@ def _realistic_state() -> dict[str, object]:
         "conventions": DocConventions(dayfirst=True, number_grouping="indian"),
         "round": 1,
         "as_of": date(2026, 3, 31),
+        "pending_reset": Reset((item,)),
     }
 
 

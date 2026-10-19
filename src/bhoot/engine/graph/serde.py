@@ -30,6 +30,7 @@ from bhoot.domain.field_state import Attempt, FieldState, FieldStatus
 from bhoot.domain.modes import Mode, Tier
 from bhoot.domain.schema import Criticality, FieldPath, FieldSpec, Granularity
 from bhoot.domain.work import WorkItem, WorkKind, WorkOutcome, WorkStatus
+from bhoot.engine.graph.state import Reset
 from bhoot.engine.normalize.conventions import DocConventions
 from bhoot_graph import JsonSerializer
 
@@ -57,6 +58,7 @@ _DATACLASSES: dict[str, type] = {
     "WorkOutcome": WorkOutcome,
     "CropRequest": CropRequest,
     "DocConventions": DocConventions,
+    "Reset": Reset,
 }
 
 _ENUMS: dict[str, type[Enum]] = {
