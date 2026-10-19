@@ -65,7 +65,7 @@ class CostReport:
 
     @staticmethod
     def merge(a: CostReport | None, b: CostReport | None) -> CostReport:
-        """Associative merge, usable as a LangGraph reducer for parallel branches."""
+        """Associative merge, usable as a graph state reducer for parallel branches."""
         if a is None:
             return b or CostReport()
         if b is None:

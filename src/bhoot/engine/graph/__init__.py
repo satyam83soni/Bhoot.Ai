@@ -1,1 +1,1 @@
-"""LangGraph state, graph builder and routing functions."""
+"""Extraction graph state, builder and routing functions."""

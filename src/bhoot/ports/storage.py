@@ -68,7 +68,7 @@ class BlobStore(Protocol):
 
 @runtime_checkable
 class CheckpointerFactory(Protocol):
-    async def create(self) -> object: ...  # a LangGraph checkpoint saver (kept opaque here)
+    async def create(self) -> object: ...  # a graph checkpoint saver (kept opaque here)
 
 
 @runtime_checkable

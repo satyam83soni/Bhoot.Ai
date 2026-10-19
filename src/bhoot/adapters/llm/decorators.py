@@ -1,7 +1,7 @@
 """Stackable LLMClient decorators. Each one adds one concern; all of them are LLMClients.
 
 Order used by bootstrap (outermost first):
-Tracing → Caching → ConcurrencyLimited → RateLimited → Retrying → LiteLLMClient
+Tracing → Caching → ConcurrencyLimited → RateLimited → Retrying → ModelRouter
 
 * a cache hit skips the concurrency slot, the rate limit, retries and the provider
 * only real provider calls consume rate-limit budget
