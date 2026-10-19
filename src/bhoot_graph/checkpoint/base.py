@@ -11,10 +11,11 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Literal
 
 from bhoot_graph.checkpoint.serde import JsonSerializer
 from bhoot_graph.errors import GraphError
+from bhoot_graph.types import Interrupt
 
 
 class CheckpointMismatchError(GraphError):
@@ -35,11 +36,18 @@ class Task:
 
 @dataclass(frozen=True, slots=True)
 class PendingWrite:
-    """The result of a task that finished in a step that failed overall."""
+    """What one task of an unfinished step left behind.
+
+    ``done``: it finished (its siblings failed or paused), so resuming reuses its result.
+    ``paused``: it called ``interrupt()``; ``resumes`` holds the answers it has so far.
+    """
 
     task_id: str
-    update: Mapping[str, Any]
+    update: Mapping[str, Any] = field(default_factory=dict)
     goto: tuple[Any, ...] = ()  # node names and Sends
+    kind: Literal["done", "paused"] = "done"
+    interrupts: tuple[Interrupt, ...] = ()
+    resumes: tuple[Any, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -130,8 +138,24 @@ class BaseCheckpointSaver(ABC):
         )
 
     def dump_write(self, write: PendingWrite) -> bytes:
-        return self.serde.dumps([write.task_id, dict(write.update), list(write.goto)])
+        return self.serde.dumps(
+            {
+                "task_id": write.task_id,
+                "update": dict(write.update),
+                "goto": list(write.goto),
+                "kind": write.kind,
+                "interrupts": [[i.value, i.id, i.deadline] for i in write.interrupts],
+                "resumes": list(write.resumes),
+            }
+        )
 
     def load_write(self, raw: bytes) -> PendingWrite:
-        task_id, update, goto = self.serde.loads(raw)
-        return PendingWrite(task_id, update, tuple(goto))
+        data = self.serde.loads(raw)
+        return PendingWrite(
+            task_id=data["task_id"],
+            update=data["update"],
+            goto=tuple(data["goto"]),
+            kind=data["kind"],
+            interrupts=tuple(Interrupt(*item) for item in data["interrupts"]),
+            resumes=tuple(data["resumes"]),
+        )
