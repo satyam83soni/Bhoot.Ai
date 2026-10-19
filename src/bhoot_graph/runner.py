@@ -21,6 +21,7 @@ import asyncio
 import contextlib
 import hashlib
 import json
+import time
 import uuid
 from collections.abc import AsyncIterator, Hashable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -43,10 +44,12 @@ from bhoot_graph.errors import (
 )
 from bhoot_graph.graph import Branch, NodeSpec
 from bhoot_graph.state import Channel, apply_writes
+from bhoot_graph.stream import RunStream, parse_modes, set_writers
 from bhoot_graph.types import Command, Send
 
 DEFAULT_RECURSION_LIMIT = 25
 DEFAULT_LOCK_TTL_S = 900.0  # refreshed every superstep
+DEFAULT_STREAM_BUFFER = 256  # events waiting for the consumer before the run pauses
 RunConfig = Mapping[str, Any]
 
 
@@ -67,6 +70,14 @@ class StateSnapshot:
     step: int
     checkpoint_id: str
     created_at: str
+
+
+@dataclass(frozen=True, slots=True)
+class _Failed:
+    error: BaseException
+
+
+_END = object()
 
 
 @dataclass(slots=True)
@@ -131,6 +142,51 @@ class CompiledGraph:
             state = dict(result.state)
         return state
 
+    async def astream(
+        self,
+        input: Mapping[str, Any] | None,
+        config: RunConfig | None = None,
+        *,
+        stream_mode: str | Sequence[str] = "values",
+    ) -> AsyncIterator[Any]:
+        """Run the graph and yield its events as they happen (modes: see ``bhoot_graph.stream``).
+
+        One mode yields bare chunks; a list of modes yields ``(mode, chunk)`` pairs. If the
+        consumer stops early (``break``), the run is cancelled and, with a checkpointer, can
+        be resumed from its last saved step. An error is raised after the events before it.
+        """
+        modes, single = parse_modes(stream_mode)
+        buffer = int((config or {}).get("stream_buffer", DEFAULT_STREAM_BUFFER))
+        stream = RunStream(modes, buffer)
+        producer = asyncio.create_task(self._produce(input, config, stream))
+        try:
+            while True:
+                item = await stream.queue.get()
+                if item is _END:
+                    return
+                if isinstance(item, _Failed):
+                    raise item.error
+                mode, chunk = item
+                yield chunk if single else (mode, chunk)
+        finally:
+            producer.cancel()
+            await asyncio.gather(producer, return_exceptions=True)
+
+    async def _produce(
+        self, input: Mapping[str, Any] | None, config: RunConfig | None, stream: RunStream
+    ) -> None:
+        try:
+            async for result in self._steps(input, config, stream):
+                for task, update in result.updates:
+                    await stream.push("updates", {task.node: dict(update)})
+                await stream.push("values", dict(result.state))
+        except asyncio.CancelledError:
+            raise
+        except BaseException as exc:  # handed to the consumer, after the events before it
+            await stream.close(_Failed(exc))
+            return
+        await stream.close(_END)
+
     def invoke(
         self, input: Mapping[str, Any] | None, config: RunConfig | None = None
     ) -> dict[str, Any]:
@@ -173,11 +229,14 @@ class CompiledGraph:
 
     # ------------------------------------------------------------------ the loop
     async def _steps(
-        self, input: Mapping[str, Any] | None, config: RunConfig | None
+        self,
+        input: Mapping[str, Any] | None,
+        config: RunConfig | None,
+        stream: RunStream | None = None,
     ) -> AsyncIterator[StepResult]:
         config = dict(config or {})
         if self.checkpointer is None:
-            async for result in self._loop(input, config, None):
+            async for result in self._loop(input, config, None, stream):
                 yield result
             return
         saver, thread = self._saver_and_thread(config)
@@ -187,13 +246,17 @@ class CompiledGraph:
         if not await saver.aacquire(thread, saving.owner, saving.ttl_s):
             raise ThreadBusyError(f"thread {thread!r} is being run by another process")
         try:
-            async for result in self._loop(input, config, saving):
+            async for result in self._loop(input, config, saving, stream):
                 yield result
         finally:
             await saver.arelease(thread, saving.owner)
 
     async def _loop(
-        self, input: Mapping[str, Any] | None, config: RunConfig, saving: _Saving | None
+        self,
+        input: Mapping[str, Any] | None,
+        config: RunConfig,
+        saving: _Saving | None,
+        stream: RunStream | None,
     ) -> AsyncIterator[StepResult]:
         limit = int(config.get("recursion_limit", DEFAULT_RECURSION_LIMIT))
         cap = config.get("max_concurrency")
@@ -215,7 +278,7 @@ class CompiledGraph:
             state = apply_writes(base, self.channels, [("input", dict(input or {}))])
             waiting = {}
             tasks = await self._schedule(step, [(START, ())], state, config, waiting)
-            await self._save(saving, step, state, tasks, waiting)
+            await self._save(saving, step, state, tasks, waiting, stream)
         yield StepResult(
             step, (), (), state
         )  # the starting state: a run where nothing fires returns it
@@ -230,7 +293,9 @@ class CompiledGraph:
                     "if the loop is expected to run longer"
                 )
             step += 1
-            outcomes, failure = await self._run_step(step, tasks, state, config, semaphore, done)
+            outcomes, failure = await self._run_step(
+                step, tasks, state, config, semaphore, done, stream
+            )
             if failure is not None:
                 if saving is not None:
                     for task in tasks:
@@ -248,7 +313,7 @@ class CompiledGraph:
             finished = [(t.node, o.goto) for t, o in ordered]
             tasks = await self._schedule(step, finished, state, config, waiting)
             done = {}
-            await self._save(saving, step, state, tasks, waiting)
+            await self._save(saving, step, state, tasks, waiting, stream)
             yield StepResult(
                 step, tuple(t for t, _ in ordered), tuple((t, o.update) for t, o in ordered), state
             )
@@ -260,6 +325,7 @@ class CompiledGraph:
         state: Mapping[str, Any],
         tasks: Sequence[Task],
         waiting: Mapping[int, set[str]],
+        stream: RunStream | None,
     ) -> None:
         if saving is None:
             return
@@ -279,6 +345,14 @@ class CompiledGraph:
         )
         await saving.saver.aput(checkpoint)
         saving.checkpoint_id = checkpoint.id
+        if stream is not None:
+            event = {
+                "type": "checkpoint",
+                "step": step,
+                "checkpoint_id": checkpoint.id,
+                "next": [t.node for t in tasks],
+            }
+            await stream.push("debug", event)
 
     def _check_compatible(self, saved: Checkpoint) -> None:
         if (saved.graph, saved.version) != (self.name, self.version):
@@ -311,12 +385,13 @@ class CompiledGraph:
         config: RunConfig,
         semaphore: contextlib.AbstractAsyncContextManager[Any],
         done: Mapping[str, _Outcome],
+        stream: RunStream | None,
     ) -> tuple[dict[str, _Outcome], BaseException | None]:
         """Run the step's tasks (reusing ``done`` ones). Returns the outcomes of every task
         that finished, and the error to raise if the step as a whole failed."""
         outcomes = {task_id: done[task_id] for task_id in (t.id for t in tasks) if task_id in done}
         running = {
-            task.id: asyncio.create_task(self._run_task(task, state, config, semaphore))
+            task.id: asyncio.create_task(self._run_task(task, state, config, semaphore, stream))
             for task in tasks
             if task.id not in done
         }
@@ -354,6 +429,38 @@ class CompiledGraph:
         return outcomes, None
 
     async def _run_task(
+        self,
+        task: Task,
+        state: Mapping[str, Any],
+        config: RunConfig,
+        semaphore: contextlib.AbstractAsyncContextManager[Any],
+        stream: RunStream | None,
+    ) -> _Outcome:
+        if stream is None:
+            return await self._call_node(task, state, config, semaphore)
+        set_writers(stream.writers_for(task.node, task.id))
+        step = int(task.id.split(":", 1)[0])
+        stream.task_event({"type": "task", "step": step, "task_id": task.id, "node": task.node})
+        started = time.perf_counter()
+        error: str | None = None
+        try:
+            return await self._call_node(task, state, config, semaphore)
+        except BaseException as exc:
+            error = f"{type(exc).__name__}: {exc}"
+            raise
+        finally:
+            stream.task_event(
+                {
+                    "type": "task_result",
+                    "step": step,
+                    "task_id": task.id,
+                    "node": task.node,
+                    "duration_ms": round((time.perf_counter() - started) * 1000, 3),
+                    "error": error,
+                }
+            )
+
+    async def _call_node(
         self,
         task: Task,
         state: Mapping[str, Any],
