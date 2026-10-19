@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import asyncio
+import importlib
 import operator
 from collections import Counter
 from datetime import UTC, datetime, timedelta
@@ -31,6 +31,8 @@ class State(TypedDict):
 
 
 CONFIG = {"configurable": {"thread_id": "job-7"}}
+# the package exports the interrupt() function under the module's name
+INTERRUPT_MODULE = importlib.import_module("bhoot_graph.interrupt")
 
 
 @pytest.fixture(params=["memory", "sqlite"])
@@ -189,8 +191,10 @@ async def test_an_answer_survives_a_crash_after_it_was_given(saver: BaseCheckpoi
 
 
 # ---------------------------------------------------------------- deadlines
-async def test_deadline_passes_and_the_default_is_used(saver: BaseCheckpointSaver) -> None:
-    deadline = datetime.now(UTC) + timedelta(milliseconds=50)
+async def test_deadline_passes_and_the_default_is_used(
+    saver: BaseCheckpointSaver, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    deadline = datetime.now(UTC) + timedelta(hours=1)
 
     async def review(state: State) -> dict[str, Any]:
         return {"total": interrupt("total?", deadline=deadline, default="needs_review")}
@@ -201,7 +205,7 @@ async def test_deadline_passes_and_the_default_is_used(saver: BaseCheckpointSave
     app = g.compile(saver)
     paused = await app.ainvoke({}, CONFIG)
     assert paused["__interrupt__"][0].deadline == deadline
-    await asyncio.sleep(0.1)
+    monkeypatch.setattr(INTERRUPT_MODULE, "_now", lambda: deadline + timedelta(seconds=1))
     assert (await app.ainvoke(None, CONFIG))["total"] == "needs_review"
 
 

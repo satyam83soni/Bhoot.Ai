@@ -22,6 +22,10 @@ from bhoot_graph.types import Interrupt
 _NO_DEFAULT: Any = object()
 
 
+def _now() -> datetime:
+    return datetime.now(UTC)
+
+
 class GraphInterrupt(BaseException):  # a signal, like KeyboardInterrupt
     """Raised by ``interrupt()`` to pause the run.
 
@@ -66,6 +70,6 @@ def interrupt(value: Any, *, deadline: datetime | None = None, default: Any = _N
     scratch.calls += 1
     if index < len(scratch.resumes):
         return scratch.resumes[index]
-    if deadline is not None and datetime.now(UTC) >= deadline:
+    if deadline is not None and _now() >= deadline:
         return default
     raise GraphInterrupt(Interrupt(value, f"{scratch.task_id}#{index}", deadline))
