@@ -134,6 +134,10 @@ class FieldState:
             crop_checked=crop_checked,
         )
 
+    def with_confidence(self, confidence: float, signals: Mapping[str, float]) -> FieldState:
+        """Record the score and why (no status change)."""
+        return replace(self, confidence=confidence, confidence_signals=signals)
+
     def with_alternative(self, candidate: CandidateValue) -> FieldState:
         """A cross-check answer is stored next to the value; status does not change."""
         return replace(self, alternatives=(*self.alternatives, candidate))

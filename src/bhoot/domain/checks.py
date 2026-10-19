@@ -38,4 +38,13 @@ class CheckResult:
         return self.status is CheckStatus.FAIL and self.severity is Severity.ERROR
 
     def implicates(self, path: FieldPath) -> bool:
-        return any(p.matches(path) or p == path for p in self.paths)
+        """True if ``path`` is one of the check's paths or lies inside one: a check on the row
+        ``transactions[4]`` implicates ``transactions[4].balance``."""
+        target = path.parts()
+        for p in self.paths:
+            n = len(p.parts())
+            if n <= len(target):
+                prefix = FieldPath.from_parts(target[:n])
+                if p == prefix or p.matches(prefix):
+                    return True
+        return False
