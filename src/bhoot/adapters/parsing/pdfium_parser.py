@@ -2,11 +2,15 @@
 
 Coordinates are converted to the domain convention (PDF points, origin top-left).
 Words and tables come from pdfplumber, lazily, only for pages that need them.
+
+PDFium is not thread-safe: every call into it holds ``PDFIUM_LOCK``. Parsing runs in worker
+threads (several documents at once), so without the lock two parses can crash the process.
 """
 
 from __future__ import annotations
 
 import hashlib
+import threading
 
 import pypdfium2 as pdfium
 
@@ -15,6 +19,7 @@ from bhoot.domain.errors import CorruptPdfError, EncryptedPdfError, TooManyPages
 from bhoot.ports.parsing import DocumentInput
 
 PDF_MIME = "application/pdf"
+PDFIUM_LOCK = threading.RLock()
 
 
 def open_pdf(inp: DocumentInput) -> pdfium.PdfDocument:
@@ -36,6 +41,10 @@ class PdfiumDocumentParser:
         return mime == PDF_MIME
 
     def parse(self, inp: DocumentInput, *, max_pages: int | None) -> Document:
+        with PDFIUM_LOCK:
+            return self._parse(inp, max_pages)
+
+    def _parse(self, inp: DocumentInput, max_pages: int | None) -> Document:
         pdf = open_pdf(inp)
         try:
             count = len(pdf)
