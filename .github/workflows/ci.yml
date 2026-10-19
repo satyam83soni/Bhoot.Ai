@@ -47,3 +47,29 @@ jobs:
       - name: Show interpreter under test
         run: uv run --no-sync python --version
       - run: uv run --no-sync pytest -m "not live" --cov --cov-report=term-missing
+
+  # bhoot is a library: users bring their own versions of pydantic, the provider SDKs and the
+  # rest. Prove the whole declared range works, not just what uv.lock happens to pin.
+  deps:
+    name: deps (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: oldest
+            python: "3.11"
+            sync: --resolution lowest-direct
+          - name: newest
+            python: "3.13"
+            sync: --upgrade
+    env:
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv python install ${{ matrix.python }}
+      - run: uv sync ${{ matrix.sync }} --group dev --group tools
+      - name: Show resolved versions
+        run: uv pip list
+      - run: uv run --no-sync pytest -m "not live" -q
