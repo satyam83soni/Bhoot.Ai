@@ -31,8 +31,9 @@ def ephemeral_pack(schema: SchemaDefinition) -> DocPack:
 
 
 class JobFactory:
-    def __init__(self, settings: BhootSettings) -> None:
+    def __init__(self, settings: BhootSettings, *, ocr_engine: str | None = None) -> None:
         self.settings = settings
+        self.ocr_engine = ocr_engine
 
     def create(self, req: ExtractRequest, pack: DocPack | None = None) -> JobSpec:
         if pack is None:
@@ -61,6 +62,7 @@ class JobFactory:
             pack=pack.ref,
             rule_ids=tuple(sorted(r.rule_id for r in pack.rules)),
             models=models,
+            ocr_engine=self.ocr_engine,
         )
         cache_key = content_hash(
             {

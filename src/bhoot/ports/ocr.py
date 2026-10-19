@@ -60,8 +60,11 @@ class AssembledText:
 
 @runtime_checkable
 class OcrEngine(Protocol):
-    name: str
-    version: str
+    @property
+    def name(self) -> str: ...
+
+    @property
+    def version(self) -> str: ...
 
     def available(self) -> bool: ...
 

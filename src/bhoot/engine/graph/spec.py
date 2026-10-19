@@ -27,6 +27,8 @@ from bhoot.engine.nodes import (
     LoadNode,
     MergeNode,
     NormalizeNode,
+    OcrNode,
+    PageImagesNode,
     PlanNode,
     RepairPlanNode,
     ValidateNode,
@@ -148,6 +150,8 @@ NODE_FACTORIES: StrategyRegistry[NodeFactory] = StrategyRegistry(
     {
         "load": LoadNode,
         "classify": ClassifyNode,
+        "ocr": OcrNode,
+        "page_images": PageImagesNode,
         "plan": PlanNode,
         "code_extract": CodeExtractNode,
         "llm_extract": LLMExtractNode,
@@ -166,11 +170,13 @@ ROUTERS: StrategyRegistry[RouterFactory] = StrategyRegistry(
 
 DEFAULT_GRAPH = GraphSpec(
     name="bhoot.extraction",
-    version="1",
+    version="2",  # 2: ocr and page_images steps
     entry="load",
     nodes=(
         "load",
         "classify",
+        "ocr",
+        "page_images",
         "plan",
         "code_extract",
         "llm_extract",
@@ -184,7 +190,9 @@ DEFAULT_GRAPH = GraphSpec(
     ),
     edges=(
         EdgeSpec("load", "classify"),
-        EdgeSpec("classify", "plan"),
+        EdgeSpec("classify", "ocr"),
+        EdgeSpec("ocr", "page_images"),
+        EdgeSpec("page_images", "plan"),
         EdgeSpec("plan", "code_extract"),
         EdgeSpec("code_extract", router="work_items", targets=("llm_extract", "normalize")),
         EdgeSpec("llm_extract", "normalize"),

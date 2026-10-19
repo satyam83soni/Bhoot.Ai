@@ -1,7 +1,13 @@
 """Engine nodes: each one is a step of the extraction graph."""
 
 from bhoot.engine.nodes.base import BaseNode, Update
-from bhoot.engine.nodes.document import ClassifyNode, LoadNode, classify_page
+from bhoot.engine.nodes.document import (
+    ClassifyNode,
+    LoadNode,
+    OcrNode,
+    PageImagesNode,
+    classify_page,
+)
 from bhoot.engine.nodes.extract import LLMExtractNode, PageView, light_page
 from bhoot.engine.nodes.fields import (
     DecideNode,
@@ -23,6 +29,8 @@ __all__ = [
     "LoadNode",
     "MergeNode",
     "NormalizeNode",
+    "OcrNode",
+    "PageImagesNode",
     "PageView",
     "PlanNode",
     "RepairPlanNode",

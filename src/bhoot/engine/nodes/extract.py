@@ -77,7 +77,7 @@ class LLMExtractNode(BaseNode):
         dialect, warning = dialect_for(llm.capabilities(model))
         only = item.paths or None
         envelope = EvidenceSchemaBuilder().build(schema, only=only)
-        if item.use_images:
+        if item.use_images and item.kind is not WorkKind.CROP:  # crops only, never the page
             view = await self._with_images(item, view)
         crop_refs = await self._render_crops(item, view)
         inputs = PromptInputs(
