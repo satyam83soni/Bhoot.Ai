@@ -216,7 +216,7 @@ class Bhoot:
             max_cost_usd=Decimal(str(max_cost_usd)) if max_cost_usd is not None else None,
             options=opts,
         )
-        job = JobFactory(self.settings).create(req, pack)
+        job = JobFactory(self.settings, ocr_engine=self.services.ocr_engine_id).create(req, pack)
         self._jobs[job.job_id] = (job, model)
         return job, model
 

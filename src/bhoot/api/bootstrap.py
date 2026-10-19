@@ -18,6 +18,7 @@ from bhoot.adapters.llm.decorators import (
 from bhoot.adapters.llm.rate_limiter import AsyncTokenBucket, SemaphoreLimiter
 from bhoot.adapters.llm.router import ModelRouter
 from bhoot.adapters.null import InMemoryLLMCache, NoopTracer, NullLLMCache
+from bhoot.adapters.ocr import OcrTextAssembler, OpenCvScanPreprocessor, RapidOcrEngine
 from bhoot.adapters.parsing.factory import MimeParserSelector
 from bhoot.adapters.parsing.image_parser import ImageDocumentParser
 from bhoot.adapters.parsing.images import (
@@ -88,4 +89,7 @@ def build_services(settings: BhootSettings, *, llm: LLMClient | None = None) -> 
         preprocessor=PillowPreprocessor(),
         crops=PillowCropRenderer(),
         tables=PlumberTableExtractor(),
+        ocr=RapidOcrEngine(settings.ocr.model_profile, threads=settings.ocr.threads_per_page),
+        scan_preprocessor=OpenCvScanPreprocessor(),
+        ocr_assembler=OcrTextAssembler(),
     )
