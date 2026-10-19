@@ -17,7 +17,7 @@ from bhoot.domain.example import Example
 from bhoot.domain.locales import Locale
 from bhoot.domain.prompt import PromptTemplate
 from bhoot.domain.schema import FieldSpec, SchemaDefinition
-from bhoot.domain.work import WorkItem
+from bhoot.domain.work import WorkItem, WorkKind
 from bhoot.engine.prompting.examples import ExampleSelector
 from bhoot.engine.prompting.system_prompts import GROUNDING_RULES, INJECTION_GUARD, OUTPUT_RULES
 from bhoot.engine.prompting.templates import render_prompt
@@ -129,7 +129,8 @@ def _document_parts(
 
     for index in item.page_indices:
         page = doc.page(index)
-        if item.use_images and page.image_ref is not None:
+        # a crop re-read sends the page as text plus the small crops, never the full page image
+        if item.use_images and item.kind is not WorkKind.CROP and page.image_ref is not None:
             text.append(f'<page n="{page.number}" type="image"/>')
             flush()
             parts.append(ContentPart(type="image", image_ref=page.image_ref, detail="high"))

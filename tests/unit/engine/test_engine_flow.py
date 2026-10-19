@@ -262,7 +262,7 @@ async def test_streaming_reports_progress_then_the_result() -> None:
     h.llm.when(kind="extract").respond(_answer())
     events = [e async for e in h.runner.stream(await h.job())]
     nodes = [payload["node"] for kind, payload in events if kind == "node"]
-    assert nodes[:3] == ["load", "classify", "plan"]
+    assert nodes[:5] == ["load", "classify", "ocr", "page_images", "plan"]
     assert "llm_extract" in nodes
     assert events[-1][0] == "result"
     assert events[-1][1].status is JobStatus.SUCCEEDED

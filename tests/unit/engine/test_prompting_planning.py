@@ -253,11 +253,21 @@ def test_messages_for_images_crops_and_prompt_only_models() -> None:
         crop_refs=("crops/" + "a" * 64 + ".png",),
     )
     assert '"closing_balance"' in (messages[0].parts[0].text or "")  # schema in the prompt
+    # a crop re-read: page text for context plus only the crop image, never the whole page
     parts = messages[-1].parts
-    assert [p.type for p in parts] == ["text", "image", "text", "image", "text", "image", "text"]
-    assert parts[1].image_ref == DOC.page(0).image_ref
-    assert parts[5].image_ref is not None
-    assert parts[5].image_ref.startswith("crops/")
+    assert [p.type for p in parts] == ["text", "image", "text"]
+    assert parts[1].image_ref is not None
+    assert parts[1].image_ref.startswith("crops/")
     summary = parts[0].text or ""
+    assert '<page n="1">' in summary
     assert "closing_balance" in summary
     assert "account_number" not in summary
+
+    vision = _item(page_indices=(0, 2), use_images=True)
+    vision_parts = (
+        MessageBuilder(StaticSelector(k=0))
+        .build(inputs, vision, DOC, envelope=env, dialect=PromptOnlyDialect())[-1]
+        .parts
+    )
+    assert [p.type for p in vision_parts] == ["text", "image", "text", "image", "text"]
+    assert vision_parts[1].image_ref == DOC.page(0).image_ref

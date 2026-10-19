@@ -18,6 +18,7 @@ from bhoot.engine.cost import BudgetGuard, PriceBook
 from bhoot.engine.events import EventBus
 from bhoot.engine.validation import RuleRegistry
 from bhoot.ports.llm import LLMClient
+from bhoot.ports.ocr import OcrEngine, OcrTextAssembler, ScanPreprocessor
 from bhoot.ports.parsing import (
     CropRenderer,
     ImagePreprocessor,
@@ -38,6 +39,9 @@ class EngineServices:
     preprocessor: ImagePreprocessor
     crops: CropRenderer
     tables: TableExtractor | None = None
+    ocr: OcrEngine | None = None  # None: scanned pages go to the vision model
+    scan_preprocessor: ScanPreprocessor | None = None
+    ocr_assembler: OcrTextAssembler | None = None
     events: EventBus = field(default_factory=EventBus)
     budget: BudgetGuard = field(default_factory=BudgetGuard)
     rules: RuleRegistry = field(default_factory=RuleRegistry)
@@ -49,6 +53,13 @@ class EngineServices:
     @property
     def models(self) -> ModelTierConfig | None:
         return self.settings.models
+
+    @property
+    def ocr_engine_id(self) -> str | None:
+        """Which OCR (engine, version, profile) reads scans, for the result's versions."""
+        if self.ocr is None or not self.settings.ocr.enabled or not self.ocr.available():
+            return None
+        return f"{self.ocr.name}-{self.ocr.version}-{self.settings.ocr.model_profile}"
 
 
 @dataclass(frozen=True)
