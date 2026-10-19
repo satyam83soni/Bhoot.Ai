@@ -18,9 +18,24 @@ from bhoot.engine.normalize.numbers import AmountParseError, parse_amount
 @dataclass(frozen=True, slots=True)
 class DocConventions:
     dayfirst: bool
-    number_grouping: Literal["indian", "international"]
+    # "auto": no amount told the styles apart, so each value is read with whichever valid
+    # grouping it has (forcing the locale's style would reject a correct "117,861.77")
+    number_grouping: Literal["indian", "international", "auto"]
     date_evidence: int = 0  # how many dates decided the order
     number_evidence: int = 0
+
+
+def _grouping_vote(raw: str) -> Literal["indian", "international"] | None:
+    """The one style that can read ``raw``, or None when both (or neither) can."""
+    styles: tuple[Literal["indian", "international"], ...] = ("indian", "international")
+    readable = []
+    for style in styles:
+        try:
+            parse_amount(raw, style)
+        except AmountParseError:
+            continue
+        readable.append(style)
+    return readable[0] if len(readable) == 1 else None
 
 
 def detect_conventions(
@@ -43,18 +58,12 @@ def detect_conventions(
 
     indian = international = 0
     for raw in amounts:
-        if str(raw).count(",") < 2:  # one comma can't tell the two styles apart
-            continue
-        try:
-            found = parse_amount(raw).grouping
-        except AmountParseError:
-            continue
-        indian += found == "indian"
-        international += found == "international"
+        vote = _grouping_vote(str(raw))
+        indian += vote == "indian"
+        international += vote == "international"
+    grouping: Literal["indian", "international", "auto"]
     if indian == international:
-        grouping: Literal["indian", "international"] = (
-            "international" if locale.number_grouping == "international" else "indian"
-        )
+        grouping = locale.number_grouping if indian == 0 else "auto"
     else:
         grouping = "indian" if indian > international else "international"
 
