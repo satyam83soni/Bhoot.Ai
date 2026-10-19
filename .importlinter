@@ -1,5 +1,7 @@
 [importlinter]
-root_package = bhoot
+root_packages =
+    bhoot
+    bhoot_graph
 include_external_packages = True
 
 # Layer rules: System_Design_v0.1.md Â§3.3
@@ -17,6 +19,7 @@ forbidden_modules =
     bhoot.packs
     bhoot.api
     bhoot.cli
+    bhoot_graph
     openai
     anthropic
     google
@@ -31,6 +34,7 @@ type = forbidden
 source_modules =
     bhoot.ports
 forbidden_modules =
+    bhoot_graph
     bhoot.config
     bhoot.engine
     bhoot.adapters
@@ -44,6 +48,7 @@ type = forbidden
 source_modules =
     bhoot.config
 forbidden_modules =
+    bhoot_graph
     bhoot.engine
     bhoot.ports
     bhoot.adapters
@@ -86,6 +91,7 @@ type = forbidden
 source_modules =
     bhoot.packs
 forbidden_modules =
+    bhoot_graph
     bhoot.ports
     bhoot.adapters
     bhoot.api
@@ -101,3 +107,11 @@ forbidden_modules =
     bhoot.engine.crosscheck
     bhoot.engine.merge
     bhoot.engine.cost
+
+[importlinter:contract:graph-runner-is-standalone]
+name = bhoot_graph is a standalone package: it never imports bhoot
+type = forbidden
+source_modules =
+    bhoot_graph
+forbidden_modules =
+    bhoot

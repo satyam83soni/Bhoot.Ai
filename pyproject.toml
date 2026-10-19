@@ -81,10 +81,10 @@ tools = [
 path = "src/bhoot/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/bhoot"]
+packages = ["src/bhoot", "src/bhoot_graph"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src/bhoot", "README.md"]
+include = ["src/bhoot", "src/bhoot_graph", "README.md"]
 
 # ---------------------------------------------------------------- ruff
 [tool.ruff]
@@ -97,13 +97,13 @@ select = ["E", "F", "W", "I", "UP", "B", "SIM", "C4", "RUF", "PT", "ASYNC", "TID
 ignore = ["E501"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["bhoot"]
+known-first-party = ["bhoot", "bhoot_graph"]
 
 # ---------------------------------------------------------------- mypy
 [tool.mypy]
 python_version = "3.11"
 mypy_path = "src"
-packages = ["bhoot"]
+packages = ["bhoot", "bhoot_graph"]
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
@@ -112,7 +112,7 @@ no_implicit_optional = true
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["bhoot.domain.*", "bhoot.ports.*", "bhoot.engine.*"]
+module = ["bhoot.domain.*", "bhoot.ports.*", "bhoot.engine.*", "bhoot_graph.*"]
 strict = true
 
 [[tool.mypy.overrides]]
@@ -130,5 +130,5 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["bhoot"]
+source = ["bhoot", "bhoot_graph"]
 branch = true
