@@ -71,6 +71,20 @@ def test_conventions_from_document_evidence() -> None:
     assert us.number_grouping == "international"
 
 
+def test_one_comma_can_still_decide_the_grouping() -> None:
+    # "117,861.77" can only be international (Indian would print 1,17,861.77)
+    assert (
+        detect_conventions([], ["117,861.77", "93,142.19"], Locale()).number_grouping
+        == "international"
+    )
+    # "12,345.00" reads the same both ways: no evidence, so values are read as printed
+    conv = detect_conventions([], ["12,345.00", "500.00"], Locale())
+    assert conv.number_grouping == "auto"
+    assert conv.number_evidence == 0
+    tie = detect_conventions([], ["1,17,861.77", "117,861.77"], Locale())
+    assert tie.number_grouping == "auto"
+
+
 def test_conventions_fall_back_to_locale() -> None:
     conv = detect_conventions(
         ["03/04/2025"], ["1,234.00"], Locale(dayfirst=False, number_grouping="international")
