@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from enum import StrEnum
 
+from bhoot.domain.document import CropRequest
 from bhoot.domain.modes import Tier
 from bhoot.domain.schema import FieldPath
 
@@ -42,7 +43,7 @@ class WorkItem:
     paths: tuple[FieldPath, ...] = ()
     use_images: bool = False
     feedback: tuple[str, ...] = ()  # failed checks and hints shown to the model on repair
-    crops: tuple[str, ...] = ()  # blob keys of image crops (CROP items)
+    crops: tuple[CropRequest, ...] = ()  # regions to re-read (CROP); rendered when the call is made
     row_window: tuple[int, int] | None = None
     status: WorkStatus = WorkStatus.PENDING
 

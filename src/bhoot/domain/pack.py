@@ -16,7 +16,7 @@ from typing import Any, Protocol, runtime_checkable
 from pydantic import BaseModel, ConfigDict, Field
 
 from bhoot.domain.candidate import CandidateValue
-from bhoot.domain.document import BBox, Document, PageKind, Table
+from bhoot.domain.document import CropRequest, Document, PageKind, Table
 from bhoot.domain.example import Example
 from bhoot.domain.locales import Locale
 from bhoot.domain.prompt import PromptTemplate
@@ -102,14 +102,6 @@ class CodeExtractionContext:
     tables: TableProvider
     values: ValueParsers
     pack_options: Mapping[str, Any] = field(default_factory=lambda: MappingProxyType({}))
-
-
-@dataclass(frozen=True)
-class CropRequest:
-    page: int
-    bbox: BBox
-    paths: tuple[str, ...]  # concrete paths the crop should re-read
-    reason: str
 
 
 @dataclass(frozen=True)

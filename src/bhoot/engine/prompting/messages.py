@@ -74,7 +74,9 @@ class MessageBuilder:
         *,
         envelope: Mapping[str, Any],
         dialect: SchemaDialect,
+        crop_refs: tuple[str, ...] = (),
     ) -> tuple[LLMMessage, ...]:
+        """``crop_refs`` are blob keys of the rendered ``item.crops`` (CROP items)."""
         system = "\n\n".join(
             part
             for part in (
@@ -103,11 +105,14 @@ class MessageBuilder:
                 "pack_options": dict(inputs.pack_options or {}),
             },
         )
-        messages.append(LLMMessage(role="user", parts=_document_parts(prompt, item, doc)))
+        parts = _document_parts(prompt, item, doc, crop_refs)
+        messages.append(LLMMessage(role="user", parts=parts))
         return tuple(messages)
 
 
-def _document_parts(prompt: str, item: WorkItem, doc: Document) -> tuple[ContentPart, ...]:
+def _document_parts(
+    prompt: str, item: WorkItem, doc: Document, crop_refs: tuple[str, ...]
+) -> tuple[ContentPart, ...]:
     parts: list[ContentPart] = []
     text = [prompt, "", "<document>"]
 
@@ -124,7 +129,7 @@ def _document_parts(prompt: str, item: WorkItem, doc: Document) -> tuple[Content
             parts.append(ContentPart(type="image", image_ref=page.image_ref, detail="high"))
         else:
             text.append(f'<page n="{page.number}">\n{neutralise(page.text)}\n</page>')
-    for k, crop in enumerate(item.crops, start=1):
+    for k, crop in enumerate(crop_refs, start=1):
         text.append(f'<crop n="{k}"/>')
         flush()
         parts.append(ContentPart(type="image", image_ref=crop, detail="high"))

@@ -14,11 +14,20 @@ from bhoot.domain.candidate import CandidateRole, CandidateValue
 from bhoot.domain.checks import CheckResult, CheckStatus, Severity
 from bhoot.domain.cost import Budget, CostEntry, CostReport, Usage
 from bhoot.domain.decisions import Decision, DecisionKind
-from bhoot.domain.document import BBox, CharBox, Document, Page, PageKind, Table, TableCell, Word
+from bhoot.domain.document import (
+    BBox,
+    CharBox,
+    CropRequest,
+    Document,
+    Page,
+    PageKind,
+    Table,
+    TableCell,
+    Word,
+)
 from bhoot.domain.evidence import Evidence, EvidenceSource
 from bhoot.domain.field_state import Attempt, FieldState, FieldStatus
 from bhoot.domain.modes import Mode, Tier
-from bhoot.domain.pack import CropRequest
 from bhoot.domain.schema import Criticality, FieldPath, FieldSpec, Granularity
 from bhoot.domain.work import WorkItem, WorkKind, WorkOutcome, WorkStatus
 from bhoot.engine.normalize.conventions import DocConventions
