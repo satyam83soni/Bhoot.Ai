@@ -242,10 +242,15 @@ def test_messages_for_images_crops_and_prompt_only_models() -> None:
     env = EvidenceSchemaBuilder().build(SCHEMA, only=[FieldPath("closing_balance")])
     item = _item(
         kind=WorkKind.CROP, page_indices=(0, 2), use_images=True,
-        crops=("crops/" + "a" * 64 + ".png",), paths=(FieldPath("closing_balance"),),
+        paths=(FieldPath("closing_balance"),),
     )  # fmt: skip
     messages = MessageBuilder(StaticSelector(k=0)).build(
-        inputs, item, DOC, envelope=env, dialect=PromptOnlyDialect()
+        inputs,
+        item,
+        DOC,
+        envelope=env,
+        dialect=PromptOnlyDialect(),
+        crop_refs=("crops/" + "a" * 64 + ".png",),
     )
     assert '"closing_balance"' in (messages[0].parts[0].text or "")  # schema in the prompt
     parts = messages[-1].parts

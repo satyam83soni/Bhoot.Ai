@@ -106,6 +106,16 @@ class Table:
         return [self.row(r) for r in range(self.n_rows)]
 
 
+@dataclass(frozen=True, slots=True)
+class CropRequest:
+    """A region of a page image to re-read (crop repair on OCR pages)."""
+
+    page: int  # 0-based
+    bbox: BBox  # page coordinates (points, top-left origin)
+    paths: tuple[str, ...]  # concrete paths the crop should re-read
+    reason: str
+
+
 TextSource = Literal["pdf", "ocr", "none"]
 
 
