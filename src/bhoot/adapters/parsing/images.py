@@ -8,7 +8,7 @@ from PIL import Image, ImageOps, ImageSequence
 
 from bhoot.adapters.parsing.factory import sniff_mime
 from bhoot.adapters.parsing.image_parser import image_dpi
-from bhoot.adapters.parsing.pdfium_parser import open_pdf
+from bhoot.adapters.parsing.pdfium_parser import PDFIUM_LOCK, open_pdf
 from bhoot.domain.document import BBox
 from bhoot.ports.parsing import DocumentInput
 
@@ -38,15 +38,16 @@ class DefaultPageRenderer:
 
     def render(self, inp: DocumentInput, page_index: int, *, dpi: int) -> bytes:
         if sniff_mime(inp.data[:1024]) == "application/pdf":
-            pdf = open_pdf(inp)
-            try:
-                page = pdf[page_index]
-                width, height = page.get_size()
-                scale = min(dpi / 72, self.max_side_px / max(width, height))
-                img = page.render(scale=scale).to_pil()
-                page.close()
-            finally:
-                pdf.close()
+            with PDFIUM_LOCK:  # pdfium is not thread-safe
+                pdf = open_pdf(inp)
+                try:
+                    page = pdf[page_index]
+                    width, height = page.get_size()
+                    scale = min(dpi / 72, self.max_side_px / max(width, height))
+                    img = page.render(scale=scale).to_pil()
+                    page.close()
+                finally:
+                    pdf.close()
             return _png(img.convert("RGB"))
         with Image.open(BytesIO(inp.data)) as source:
             frame = next(f for i, f in enumerate(ImageSequence.Iterator(source)) if i == page_index)

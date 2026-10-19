@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "bhoot"
 dynamic = ["version"]
-description = "Verified, grounded structured extraction for lending documents."
+description = "Verified, grounded structured extraction from documents."
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
 authors = [{ name = "Satyam", email = "satyam83soni@gmail.com" }]
